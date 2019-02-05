@@ -38,16 +38,19 @@ import com.google.firebase.auth.GoogleAuthProvider;
     private final static int RC_SIGN_IN = 2;
 
 
-        @Override
-        protected void onStart() {
-            super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-        }
+//        @Override
+//        protected void onStart() {
+//            super.onStart();
+//        mAuth.addAuthStateListener(mAuthListener);
+//        }
 
 
 
         public void gotoMain(){
-            Intent i = new Intent(getApplicationContext(),MainActivity.class);
+
+            // MADE CHANGES
+            Intent i = new Intent(getApplicationContext(),Register.class);
+
 
             startActivity(i);
             finish();
@@ -95,6 +98,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
                 signIn();
             }
         });
+
+
 
     }
 
@@ -172,6 +177,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
     }
+
+
 
 
 }
