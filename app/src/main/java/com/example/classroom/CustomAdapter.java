@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -58,7 +60,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         ImageView thumbnailImageView = holder.thumbnailImageView;
 
         titleTextVIew.setText(dataModels.get(listPosition).getVideoTitle());
-        thumbnailImageView.setImageDrawable(LoadImageFromWebOperations(dataModels.get(listPosition).getThumbnailUrl()));
+        Picasso.get()
+                .load(dataModels.get(listPosition).getThumbnailUrl())
+                .placeholder(R.drawable.ytb_placeholder)
+                .error(R.drawable.ytb_placeholder)
+                .into(thumbnailImageView);
+
         String videoUrl = dataModels.get(listPosition).getVideoUrl();
         holder.itemView.setTag(videoUrl);
     }
