@@ -27,4 +27,17 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right|end"
+        android:layout_margin="12dp"
+        android:clickable="true"
+        android:layerType="software"
+        android:layoutDirection="locale"
+        android:translationY="190dp"
+        app:fabSize="normal"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
 </LinearLayout>
