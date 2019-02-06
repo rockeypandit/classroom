@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import javax.annotation.Nullable;
 
 public class Lectures extends Fragment {
-    private RecyclerView lecturesRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private static RecyclerView lecturesRecyclerView;
+    private static RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private static ArrayList<DataModel> data;
 
@@ -23,8 +23,8 @@ public class Lectures extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.lectures, container, false);
-        lecturesRecyclerView = container.findViewById(R.id.lectures_recycler_view);
-        layoutManager = new LinearLayoutManager(container.getContext());
+        lecturesRecyclerView = view.findViewById(R.id.lectures_recycler_view);
+        layoutManager = new LinearLayoutManager(view.getContext());
         lecturesRecyclerView.setLayoutManager(layoutManager);
 
         data = new ArrayList();
