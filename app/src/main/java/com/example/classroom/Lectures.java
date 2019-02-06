@@ -1,5 +1,8 @@
 package com.example.classroom;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -37,5 +40,20 @@ public class Lectures extends Fragment {
         lecturesRecyclerView.setAdapter(mAdapter);
 
         return view;
+    }
+
+    public static class OnCardClickListener implements View.OnClickListener {
+        private final Context context;
+
+        public OnCardClickListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            String vidUrl = v.getTag().toString();
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(vidUrl));
+            context.startActivity(intent);
+        }
     }
 }

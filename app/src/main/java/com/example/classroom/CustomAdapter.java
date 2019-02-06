@@ -22,6 +22,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             Drawable d = Drawable.createFromStream(is, "src name");
             return d;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -45,7 +46,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
 
-        //view.setOnClickListener(Lectures.cardViewClickListner);
+        view.setOnClickListener(new Lectures.OnCardClickListener(view.getContext()));
 
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
@@ -57,10 +58,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         ImageView thumbnailImageView = holder.thumbnailImageView;
 
         titleTextVIew.setText(dataModels.get(listPosition).getVideoTitle());
-        //Load image from url into the imageView
-        //Picasso.get().load(dataModels.get(listPosition).getThumbnailUrl()).into(thumbnailImageView);
-
         thumbnailImageView.setImageDrawable(LoadImageFromWebOperations(dataModels.get(listPosition).getThumbnailUrl()));
+        String videoUrl = dataModels.get(listPosition).getVideoUrl();
+        holder.itemView.setTag(videoUrl);
     }
 
     @Override
