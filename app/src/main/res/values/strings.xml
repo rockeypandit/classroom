@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">classroom</string>
+    <string name="app_name">Classroom</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <!-- Strings related to login -->
     <string name="cardImageViewDesc">cardImageViewDesc</string>
