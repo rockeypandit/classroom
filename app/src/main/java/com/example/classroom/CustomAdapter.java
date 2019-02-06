@@ -1,7 +1,6 @@
 package com.example.classroom;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +8,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     private ArrayList<DataModel> dataModels;
+
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
@@ -51,15 +60,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         //Load image from url into the imageView
         //Picasso.get().load(dataModels.get(listPosition).getThumbnailUrl()).into(thumbnailImageView);
 
-        try {
-            URL url = new URL(dataModels.get(listPosition).getThumbnailUrl());
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            thumbnailImageView.setImageBitmap(bmp);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        thumbnailImageView.setImageDrawable(LoadImageFromWebOperations(dataModels.get(listPosition).getThumbnailUrl()));
     }
 
     @Override
