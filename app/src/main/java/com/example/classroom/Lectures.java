@@ -36,7 +36,6 @@ public class Lectures extends Fragment {
         mAdapter = new CustomAdapter(data);
         lecturesRecyclerView.setAdapter(mAdapter);
 
-
         return view;
     }
 }

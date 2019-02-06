@@ -1,5 +1,7 @@
 package com.example.classroom;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
@@ -46,7 +49,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         titleTextVIew.setText(dataModels.get(listPosition).getVideoTitle());
         //Load image from url into the imageView
-        Picasso.get().load(dataModels.get(listPosition).getThumbnailUrl()).into(thumbnailImageView);
+        //Picasso.get().load(dataModels.get(listPosition).getThumbnailUrl()).into(thumbnailImageView);
+
+        try {
+            URL url = new URL(dataModels.get(listPosition).getThumbnailUrl());
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            thumbnailImageView.setImageBitmap(bmp);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
