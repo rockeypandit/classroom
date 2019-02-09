@@ -80,6 +80,7 @@ public class Lectures extends Fragment {
                                     data.add(new DataModel(snapshot.get("videoTitle").toString(), snapshot.get("videoUrl").toString()));
                                 }
                             }
+                            mAdapter.updateList(data);
                         }
                     });
                 } else {
