@@ -30,15 +30,17 @@
 
 
             <EditText
-                android:text=""
                 android:id="@+id/uname"
-                android:drawablePadding="5dp"
-                android:layout_marginTop="15dp"
-                android:textSize="15sp"
-                android:fontFamily="sans-serif-thin"
+                android:maxLines="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name" />
+                android:layout_marginTop="15dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="sans-serif-thin"
+                android:hint="Name"
+                android:inputType="text"
+                android:text=""
+                android:textSize="15sp" />
             <TextView
                 android:id="@+id/userAvailable"
                 android:layout_width="match_parent"
@@ -48,58 +50,24 @@
 
 
 
-            <Button
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
-                android:id="@+id/c1Next"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:fontFamily="sans-serif-thin"
-                android:text="NEXT"
-                android:layout_width="300dp"
-                android:layout_height="40dp">
-            </Button>
-
-        </LinearLayout>
-
-
-
-    </android.support.v7.widget.CardView>
-
-
-    <android.support.v7.widget.CardView
-        android:layout_margin="20dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="8dp"
-        android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/c2"
-        android:visibility="gone"
-
-        >
-        <LinearLayout
-            android:padding="16dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
 
 
             <EditText
                 android:text=""
                 android:id="@+id/school"
                 android:drawablePadding="5dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-thin"
+                android:maxLines="1"
+                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="School" />
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:id="@+id/standard"/>
 
 

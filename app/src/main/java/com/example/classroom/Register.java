@@ -54,9 +54,7 @@ public class Register extends AppCompatActivity {
         uName = findViewById(R.id.uname);
         userAvail = findViewById(R.id.userAvailable);
         userName = uName.getText().toString();
-        c1Next = findViewById(R.id.c1Next);
         c1 = findViewById(R.id.c1);
-        c2 = findViewById(R.id.c2);
         edtSchool = findViewById(R.id.school);
         finish = findViewById(R.id.finish);
         standard = findViewById(R.id.standard);
@@ -159,19 +157,7 @@ public class Register extends AppCompatActivity {
         });
 
 
-        c1Next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (userName.length() > 4) {
-                    c1.setVisibility(View.GONE);
-                    c2.setVisibility(View.VISIBLE);
-                } else {
-                    uName.setError("username should be more than 3 character");
-                }
 
-
-            }
-        });
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

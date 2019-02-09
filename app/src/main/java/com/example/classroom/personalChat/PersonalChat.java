@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.classroom.R;
@@ -35,22 +36,25 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PersonalChat extends AppCompatActivity {
+public class PersonalChat extends AppCompatActivity{
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mPersonalAdapter;
+    private RecyclerView.LayoutManager mPersonalLayoutManager;
     EditText messege;
     Button btnSend;
     String chatIdStr;
     Long tsLong;
-    String currentUserId, textMsg, friendId;
+    LinearLayout linearLayout;
+    String currentUserId,textMsg,friendId;
     DocumentReference personalChatId;
     NestedScrollView scrlView;
-    FirebaseFirestore db;
-    String msg = null;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mPersonalAdapter;
-    private RecyclerView.LayoutManager mPersonalLayoutManager;
     private DatabaseReference mDatabase;
+    RecyclerView rv;
+    FirebaseFirestore db;
+
+
+
     private Date dateTime;
-    private ArrayList<PersonalObject> resultsPersonal = new ArrayList<PersonalObject>();
 
     public Date getDateTime() {
         return dateTime;
@@ -60,19 +64,27 @@ public class PersonalChat extends AppCompatActivity {
         this.dateTime = datetime;
     }
 
+
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_chat);
         btnSend = findViewById(R.id.send);
-        scrlView = findViewById(R.id.scrollView);
-
+        scrlView=findViewById(R.id.scrollView);
+        rv=findViewById(R.id.recyclerView);
         messege = findViewById(R.id.message);
 
-        //  friendId = getIntent().getExtras().getString("chatId");
-        friendId = "AhS3B153mOXhbukgYLV4wGqfggf2";
+      //  friendId = getIntent().getExtras().getString("chatId");
+            friendId = "AhS3B153mOXhbukgYLV4wGqfggf2";
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
+        linearLayout = findViewById(R.id.sendLayout);
+
 
 
         final DocumentReference chatId = db.collection("USERS").document(currentUserId).collection("Friends").document("Lists");
@@ -91,78 +103,104 @@ public class PersonalChat extends AppCompatActivity {
 //
 //                Log.i("task result",task.getResult().toString());
                 DocumentSnapshot ds = task.getResult();
-                Map<String, Object> map = ds.getData();
-                //    for
+                Map<String,Object> map = ds.getData();
+            //    for
 
 
-                Log.i("MAPP", map.toString());
+                Log.i("MAPP",map.toString());
+
 
 
                 String extract = task.getResult().toString();
-                Log.i("my string", extract);
+                Log.i("my string",extract);
 
                 Pattern p = Pattern.compile("PersonalChats/(.*?), ");
                 Matcher ms = p.matcher(extract);
                 String sub = null;
-                while (ms.find()) {
-                    sub = ms.group(1).substring(0, ms.group(1).length() - 1);
+                while(ms.find())
+                {
+                    sub=ms.group(1).substring(0,ms.group(1).length()-1);
 
-                    //is your string. do what you want
-                    if ((sub.contains(")") || sub.contains("}"))) {
-                        sub = sub.replaceAll("\\)", "");
-                        sub = sub.replaceAll("\\}", "");
+                     //is your string. do what you want
+                    if ((sub.contains(")")||sub.contains("}"))){
+                        sub = sub.replaceAll("\\)","");
+                        sub = sub.replaceAll("\\}","");
                     }
                 }
 
                 sub = "AhS3B153mOXhbukgYLV4wGqfggf2";
 
 
-                if (sub == null) {
-                    Toast.makeText(getApplicationContext(), "SOMETHING WENT WRONG", Toast.LENGTH_SHORT);
-                } else
+                if (sub == null){
+                    Toast.makeText(getApplicationContext(),"SOMETHING WENT WRONG",Toast.LENGTH_SHORT);
+                }else
                     chatIdStr = sub;
-                Log.i("may be str", sub);
+                Log.i("may be str",sub);
 
 
                 //String sub = extract.substring(extract.indexOf("dMap{("),extract.indexOf(")"));
                 //String[] subStr = sub.split("Chats/");
 
 
-                //chatIdStr = chatIdData.get("QZesm4wN2GFYkekzkqsn").toString();
-                // FirebaseFirestore.getInstance().document(chatIdStr).get();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                 //chatIdStr = chatIdData.get("QZesm4wN2GFYkekzkqsn").toString();
+               // FirebaseFirestore.getInstance().document(chatIdStr).get();
 
                 //Log.i("data",chatIdData.get("QZesm4wN2GFYkekzkqsn").toString());
 //                Log.i("dataChatId",FirebaseFirestore.getInstance().document(chatIdStr).get().toString());
 
 
+
                 //personalChatId = db.collection("USERS").document(currentUserId).collection("Friends").document("List");
 
-                //    personalChatId = db.collection("USERS").document("Chat").collection("PersonalChats").document(chatIdStr);
+           //    personalChatId = db.collection("USERS").document("Chat").collection("PersonalChats").document(chatIdStr);
                 //String key = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
 
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
-                //    Log.i("firebase",key);
+                mDatabase=FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
+            //    Log.i("firebase",key);
 
 
-                getChatMessage();
+
+
+getChatMessage();
 
             }
         });
 
 
-        mRecyclerView = findViewById(R.id.recyclerView);
+
+
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(false);
 
         mPersonalLayoutManager = new LinearLayoutManager(PersonalChat.this);
         mRecyclerView.setLayoutManager(mPersonalLayoutManager);
 
-        mPersonalAdapter = new PersonalAdapter(getDataSetPersonal(), PersonalChat.this);
-        mRecyclerView.setAdapter(mPersonalAdapter);
+        mPersonalAdapter = new PersonalAdapter(getDataSetPersonal(),PersonalChat.this);
+        mRecyclerView.setAdapter(mPersonalAdapter   );
+
 
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(PersonalChat.this,
                 DividerItemDecoration.VERTICAL));
+
 
 
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -171,22 +209,26 @@ public class PersonalChat extends AppCompatActivity {
                 send();
 
 
+
             }
         });
     }
 
     private void send() {
         String textMsg = messege.getText().toString();
-        if (!textMsg.isEmpty()) {
+        if (!textMsg.isEmpty()){
 //
 //             tsLong= System.currentTimeMillis()/1000;
 //            String ts = tsLong.toString();
 
-            DatabaseReference newMessageDb = mDatabase.push();
-            Map newMessage = new HashMap();
-            newMessage.put("CreatedByUser", currentUserId);
-            newMessage.put("text", textMsg);
-            newMessageDb.setValue(newMessage);
+        DatabaseReference newMessageDb = mDatabase.push();
+        Map newMessage = new HashMap();
+        newMessage.put("CreatedByUser",currentUserId);
+        newMessage.put("text",textMsg);
+        newMessageDb.setValue(newMessage);
+
+
+
 
 
 //            Map<String, Object> chat = new HashMap<>();
@@ -196,36 +238,49 @@ public class PersonalChat extends AppCompatActivity {
         messege.setText(null);
 
     }
+    String msg = null;
+
+
 
     public void getChatMessage() {
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                if (dataSnapshot.exists()) {
-                    //  String messege = null;
+                if(dataSnapshot.exists()){
+                  //  String messege = null;
                     String createdBy = null;
 
-                    if (dataSnapshot.child("text").getValue() != null) {
+                    if (dataSnapshot.child("text").getValue()!=null){
                         msg = dataSnapshot.child("text").getValue().toString();
                     }
-                    if (dataSnapshot.child("CreatedByUser").getValue() != null) {
+                    if (dataSnapshot.child("CreatedByUser").getValue()!=null){
                         createdBy = dataSnapshot.child("CreatedByUser").getValue().toString();
                     }
 
 
-                    if (msg != null && createdBy != null) {
+                    if (msg!=null && createdBy != null){
                         Boolean currentuserBool = false;
-                        if (createdBy.equals(currentUserId)) {
+                        if (createdBy.equals(currentUserId)){
                             currentuserBool = true;
                         }
 
-                        PersonalObject newMessage = new PersonalObject(msg, currentuserBool);
+                        PersonalObject newMessage = new PersonalObject(msg,currentuserBool);
                         resultsPersonal.add(newMessage);
                         mPersonalAdapter.notifyDataSetChanged();
 
                     }
-                    scrlView.fullScroll(View.FOCUS_DOWN);
+                //    scrlView.fullScroll(View.FOCUS_DOWN);
+                    scrlView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                        @Override
+                        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                            scrlView.fullScroll(View.FOCUS_DOWN);
+
+                        }
+                    });
+
+
+
 
                 }
             }
@@ -275,9 +330,11 @@ public class PersonalChat extends AppCompatActivity {
 
     }
 
+    private ArrayList<PersonalObject> resultsPersonal= new ArrayList<PersonalObject>();
     private List<PersonalObject> getDataSetPersonal() {
         return resultsPersonal;
     }
+
 
 
 }
