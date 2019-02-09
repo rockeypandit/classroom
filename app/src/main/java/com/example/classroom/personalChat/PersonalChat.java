@@ -2,6 +2,8 @@ package com.example.classroom.personalChat;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,14 +17,15 @@ import android.widget.Toast;
 import com.example.classroom.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.Nullable;
 
 public class PersonalChat extends AppCompatActivity{
     private RecyclerView mRecyclerView;
@@ -44,6 +45,8 @@ public class PersonalChat extends AppCompatActivity{
     Long tsLong;
     String currentUserId,textMsg,friendId;
     DocumentReference personalChatId;
+    NestedScrollView scrlView;
+    private DatabaseReference mDatabase;
 
     FirebaseFirestore db;
 
@@ -70,6 +73,7 @@ public class PersonalChat extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_chat);
         btnSend = findViewById(R.id.send);
+        scrlView=findViewById(R.id.scrollView);
 
         messege = findViewById(R.id.message);
 
@@ -85,6 +89,7 @@ public class PersonalChat extends AppCompatActivity{
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
+
                 //chatIdData= task.getResult();
                 //DocumentSnapshot ds = task.getResult();
                 //ds.get(friendId);
@@ -94,6 +99,12 @@ public class PersonalChat extends AppCompatActivity{
 //                Log.i("task result",m.get(friendId).toString());
 //
 //                Log.i("task result",task.getResult().toString());
+                DocumentSnapshot ds = task.getResult();
+                Map<String,Object> map = ds.getData();
+            //    for
+
+
+                Log.i("MAPP",map.toString());
 
 
 
@@ -113,6 +124,10 @@ public class PersonalChat extends AppCompatActivity{
                         sub = sub.replaceAll("\\}","");
                     }
                 }
+
+                sub = "AhS3B153mOXhbukgYLV4wGqfggf2";
+
+
                 if (sub == null){
                     Toast.makeText(getApplicationContext(),"SOMETHING WENT WRONG",Toast.LENGTH_SHORT);
                 }else
@@ -122,6 +137,7 @@ public class PersonalChat extends AppCompatActivity{
 
                 //String sub = extract.substring(extract.indexOf("dMap{("),extract.indexOf(")"));
                 //String[] subStr = sub.split("Chats/");
+
 
 
 
@@ -149,8 +165,11 @@ public class PersonalChat extends AppCompatActivity{
 
                 //personalChatId = db.collection("USERS").document(currentUserId).collection("Friends").document("List");
 
-               personalChatId = db.collection("USERS").document("Chat").collection("PersonalChats").document(chatIdStr);
+           //    personalChatId = db.collection("USERS").document("Chat").collection("PersonalChats").document(chatIdStr);
+                //String key = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
 
+                mDatabase=FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
+            //    Log.i("firebase",key);
 
 
 
@@ -195,54 +214,107 @@ getChatMessage();
     private void send() {
         String textMsg = messege.getText().toString();
         if (!textMsg.isEmpty()){
+//
+//             tsLong= System.currentTimeMillis()/1000;
+//            String ts = tsLong.toString();
 
-             tsLong= System.currentTimeMillis()/1000;
-            String ts = tsLong.toString();
+        DatabaseReference newMessageDb = mDatabase.push();
+        Map newMessage = new HashMap();
+        newMessage.put("CreatedByUser",currentUserId);
+        newMessage.put("text",textMsg);
+        newMessageDb.setValue(newMessage);
 
 
-            Map<String, Object> chat = new HashMap<>();
-            chat.put(currentUserId + " | " + ts,textMsg);
-            personalChatId.set(chat, SetOptions.merge());
+
+
+
+//            Map<String, Object> chat = new HashMap<>();
+//            chat.put(currentUserId + " | " + ts,textMsg);
+//            personalChatId.set(chat, SetOptions.merge());
         }
         messege.setText(null);
 
     }
     String msg = null;
 
-    String createdByUser = null;
 
-    String oldMsg;
+
     public void getChatMessage() {
-        personalChatId.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if(documentSnapshot.exists()){
-                    if (msg!=null)
-                    oldMsg=msg;
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                if(dataSnapshot.exists()){
+                  //  String messege = null;
+                    String createdBy = null;
+
+                    if (dataSnapshot.child("text").getValue()!=null){
+                        msg = dataSnapshot.child("text").getValue().toString();
+                    }
+                    if (dataSnapshot.child("CreatedByUser").getValue()!=null){
+                        createdBy = dataSnapshot.child("CreatedByUser").getValue().toString();
+                    }
 
 
-                    msg =  documentSnapshot.getData().toString();
-                    Log.i("msg",msg);
-                    if (msg!=null && oldMsg!=null)
-                        msg = msg.replace(oldMsg,"");
+                    if (msg!=null && createdBy != null){
+                        Boolean currentuserBool = false;
+                        if (createdBy.equals(currentUserId)){
+                            currentuserBool = true;
+                        }
 
+                        PersonalObject newMessage = new PersonalObject(msg,currentuserBool);
+                        resultsPersonal.add(newMessage);
+                        mPersonalAdapter.notifyDataSetChanged();
 
-                    Timestamp stamp = new Timestamp(1549701580,0);
-                    Log.i("hello ",stamp.toDate().toString());
-
-
-
+                    }
+                    scrlView.fullScroll(View.FOCUS_DOWN);
 
                 }
+            }
 
-                PersonalObject newMessage = new PersonalObject(msg,true);
-                resultsPersonal.add(newMessage);
-                mPersonalAdapter.notifyDataSetChanged();
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
 
-                if (documentSnapshot.getData()!= null)
-                Log.i("DATA REAL TIME",documentSnapshot.getData().toString());
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+//        personalChatId.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                if(documentSnapshot.exists()){
+//
+//
+//                    msg =  documentSnapshot.getData().toString();
+//                    Log.i("msg",msg);
+//
+//
+////                    Timestamp stamp = new Timestamp(1549701580,0);
+////                    Log.i("hello ",stamp.toDate().toString());
+//
+//
+//
+//
+//                }
+//
+//                PersonalObject newMessage = new PersonalObject(msg,true);
+//                resultsPersonal.add(newMessage);
+//                mPersonalAdapter.notifyDataSetChanged();
+//
+//                if (documentSnapshot.getData()!= null)
+//                Log.i("DATA REAL TIME",documentSnapshot.getData().toString());
+//            }
+//        });
+
     }
 
     private ArrayList<PersonalObject> resultsPersonal= new ArrayList<PersonalObject>();
