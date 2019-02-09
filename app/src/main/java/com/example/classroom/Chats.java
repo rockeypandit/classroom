@@ -58,9 +58,10 @@ public class Chats extends Fragment {
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         //FIREBASE
-        String key = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
+        String key = FirebaseDatabase.getInstance().getReference().child("CHhat").push().getKey();
+        Log.i("KEY",key);
 
-        mDatabase.child("User").child("Chat").setValue("data");
+        //mDatabase.child("User").child("Chat").setValue("data");
 
 
 
@@ -221,7 +222,8 @@ public class Chats extends Fragment {
 
 
 
-            storeChatId.put(currentUserId + " | " + friendUid, chatId);
+            storeChatId.put(currentUserId + " | " + friendUid, key);
+            //db.collection("USERS").document(currentUserId).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
             db.collection("USERS").document(currentUserId).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
 
             Log.i("CHATID2", chatId.toString());
@@ -230,7 +232,9 @@ public class Chats extends Fragment {
             // CHAT FRIEND ID
 
 
+           // db.collection("USERS").document(friendUid).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
             db.collection("USERS").document(friendUid).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
+
         }
 
 

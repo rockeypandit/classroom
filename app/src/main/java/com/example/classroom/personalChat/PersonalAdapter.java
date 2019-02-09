@@ -1,6 +1,7 @@
 package com.example.classroom.personalChat;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -50,9 +51,12 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder>{
         chatViewHolder.mMessage.setText(chatLists.get(i).getMessage());
         if (chatLists.get(i).getCurrentUser()){
             chatViewHolder.mMessage.setGravity(Gravity.END);
-
-            //COLOR
-
+            chatViewHolder.mMessage.setTextColor(Color.parseColor("#404040"));
+            chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#F4F4F4"));
+        }else {
+            chatViewHolder.mMessage.setGravity(Gravity.START);
+            chatViewHolder.mMessage.setTextColor(Color.parseColor("#FFFFFF"));
+            chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#2DB4C8"));
         }
     }
 
