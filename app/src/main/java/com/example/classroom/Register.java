@@ -203,11 +203,11 @@ public class Register extends AppCompatActivity {
                     user.put("School",school);
 
                     Map<String, Object> userNameMap = new HashMap<>();
-                    userNameMap.put(currentUser.toString(),userName);
+                    userNameMap.put(currentUser.getUid(),userName);
 
 
                   //  db.collection("USERS").add(crrNameMap);
-                    db.collection("USERS").document(currentUser.toString()).set(user,SetOptions.merge());
+                    db.collection("USERS").document(currentUser.getUid()).set(user,SetOptions.merge());
 
 
 //                    mDocRefInfo.set(user, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {

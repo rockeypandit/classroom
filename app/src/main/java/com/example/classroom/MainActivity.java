@@ -1,30 +1,49 @@
 package com.example.classroom;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private Menu menu;
 
     private FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+    List<String> mainlist,list;
+    ArrayAdapter<String> test;
+    ListView listView;
+
+
+
+   // DocumentReference docRef = db.collection("USERS").document();
+
 
     @Override
     protected void onStart() {
@@ -53,6 +72,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        //RISHAB
+        list = new ArrayList<String>();
+        list.add("abc");
+        list.add("abcd");
+        list.add("abcde");
+        list.add("abcdef");
+        list.add("xyz");
+        list.add("xzy");
+        mainlist=new ArrayList<>();
+
+
+        listView=findViewById(R.id.list_item);
+        test = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1,mainlist);
+
+
+
+
+
+
+
+
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -64,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+
+
 
 
 
@@ -87,14 +131,82 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     }
+
+
+
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+
+            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+            android.support.v7.widget.SearchView search = (android.support.v7.widget.SearchView) menu.findItem(R.id.action_search).getActionView();
+
+            search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
+            search.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String changedText) {
+                    mainlist.clear();
+                    for (String text:list) {
+                        String newtext = text.toLowerCase();
+                        if (newtext.startsWith(changedText)) {
+                            mainlist.add(text);
+                        }
+                    }
+                    listView.setAdapter(test);
+                    return false;
+                }
+
+            });
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         return true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     @Override
@@ -104,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+
+        //LOGOUT BUTTON
+
         if (id == R.id.action_settings) {
             mAuth.signOut();
 

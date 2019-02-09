@@ -61,15 +61,25 @@ import com.google.firebase.auth.GoogleAuthProvider;
         googBtn = (SignInButton) findViewById(R.id.googBtn);
         mAuth = FirebaseAuth.getInstance();
 
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null){
-                    gotoMain();
+                    gotoMain();}
+                    else{
+//                    Intent gotoMainActivity = new Intent(getApplicationContext(),MainActivity.class);
+//                startActivity(gotoMainActivity);
+//                finish();
                 }
             }
         };
+
+//        if (mAuth !=null){
+//            Intent gotoMainActivity = new Intent(getApplicationContext(),MainActivity.class);
+//                startActivity(gotoMainActivity);
+//                finish();
+//        }
+
 
 
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -86,6 +96,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
                 Toast.makeText(getApplicationContext(),"Something went wrong",Toast.LENGTH_SHORT).show();
             }
         }).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
+
+
 
 
         googBtn.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +162,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
 
+
                             gotoMain();
                             Toast.makeText(getApplicationContext(),"LOGGED IN SUCESSFULLY",Toast.LENGTH_LONG).show();
 
@@ -178,3 +191,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
 }
+
+
+
+
+//
+// if(mAuth != null){
+//         Intent gotoMainActivity = new Intent(getApplicationContext(),MainActivity.class);
+//            startActivity(gotoMainActivity);
+//            finish();
+//            }
+
