@@ -1,6 +1,5 @@
 package com.example.classroom;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,24 +9,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     private ArrayList<DataModel> dataModels;
-
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
@@ -73,5 +59,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @Override
     public int getItemCount() {
         return dataModels.size();
+    }
+
+    public void updateList(ArrayList<DataModel> newList) {
+        dataModels = newList;
+        notifyDataSetChanged();
     }
 }

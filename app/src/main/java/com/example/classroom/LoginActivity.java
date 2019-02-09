@@ -1,4 +1,4 @@
-    package com.example.classroom;
+package com.example.classroom;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,7 +58,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        googBtn = (SignInButton) findViewById(R.id.googBtn);
+            googBtn = findViewById(R.id.googBtn);
         mAuth = FirebaseAuth.getInstance();
 
 
