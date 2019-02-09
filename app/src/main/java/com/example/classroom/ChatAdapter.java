@@ -48,6 +48,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder>{
 
 
         chatViewHolder.mChatId.setText(lists.get(i).getUserId());
+        chatViewHolder.mChatName.setText(lists.get(i).getName());
+
+
     }
 
     @Override

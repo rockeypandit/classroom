@@ -3,6 +3,7 @@ package com.example.classroom.personalChat;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder>{
     public PersonalViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         //INFLATER
-        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_chats,null,false);
+        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_chat,null,false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
 
@@ -46,6 +47,13 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull PersonalViewHolder chatViewHolder, int i) {
+        chatViewHolder.mMessage.setText(chatLists.get(i).getMessage());
+        if (chatLists.get(i).getCurrentUser()){
+            chatViewHolder.mMessage.setGravity(Gravity.END);
+
+            //COLOR
+
+        }
     }
 
     @Override
