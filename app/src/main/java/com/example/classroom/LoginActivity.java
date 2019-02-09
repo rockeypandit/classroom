@@ -23,14 +23,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-    public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
+    private final static int RC_SIGN_IN = 2;
     SignInButton googBtn;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
-
-  //  GoogleSignInClient mGoogleSignInClient;
+    //  GoogleSignInClient mGoogleSignInClient;
     GoogleApiClient mGoogleApiClient;
-    private final static int RC_SIGN_IN = 2;
 
 
 //        @Override
@@ -39,34 +38,31 @@ import com.google.firebase.auth.GoogleAuthProvider;
 //        mAuth.addAuthStateListener(mAuthListener);
 //        }
 
+    public void gotoMain() {
+
+        // MADE CHANGES
+        Intent i = new Intent(getApplicationContext(), Register.class);
 
 
-        public void gotoMain(){
-
-            // MADE CHANGES
-            Intent i = new Intent(getApplicationContext(),Register.class);
-
-
-            startActivity(i);
-            finish();
-        }
+        startActivity(i);
+        finish();
+    }
 
 
-
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-            googBtn = findViewById(R.id.googBtn);
+        googBtn = findViewById(R.id.googBtn);
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null){
-                    gotoMain();}
-                    else{
+                if (firebaseAuth.getCurrentUser() != null) {
+                    gotoMain();
+                } else {
 //                    Intent gotoMainActivity = new Intent(getApplicationContext(),MainActivity.class);
 //                startActivity(gotoMainActivity);
 //                finish();
@@ -81,23 +77,20 @@ import com.google.firebase.auth.GoogleAuthProvider;
 //        }
 
 
-
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("538759687920-l4p9kpolgov8hd9idcmfdni47v4076hi.apps.googleusercontent.com")
-                    .requestEmail()
-                    .build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("538759687920-l4p9kpolgov8hd9idcmfdni47v4076hi.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
 
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).
                 enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-            @Override
-            public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                Log.i("coneectoion result",connectionResult.toString());
-                Toast.makeText(getApplicationContext(),"Something went wrong",Toast.LENGTH_SHORT).show();
-            }
-        }).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
-
-
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Log.i("coneectoion result", connectionResult.toString());
+                        Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
 
 
         googBtn.setOnClickListener(new View.OnClickListener() {
@@ -108,15 +101,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
         });
 
 
-
     }
 
 
-
-
-
     private void signIn() {
-        Intent signInIntent =  Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -129,14 +118,12 @@ import com.google.firebase.auth.GoogleAuthProvider;
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             // Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
-            if (result.isSuccess()){
+            if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
-            }else {
-                Toast.makeText(getApplicationContext(),"AUTH WENT WRONG",Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "AUTH WENT WRONG", Toast.LENGTH_LONG).show();
             }
-
-
 
 
 //            try {
@@ -164,19 +151,19 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
                             gotoMain();
-                            Toast.makeText(getApplicationContext(),"LOGGED IN SUCESSFULLY",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "LOGGED IN SUCESSFULLY", Toast.LENGTH_LONG).show();
 
-                          //  updateUI(user);
+                            //  updateUI(user);
                         } else {
 
 
-                            Toast.makeText(getApplicationContext(),"FAILED TO LOG IN ",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "FAILED TO LOG IN ", Toast.LENGTH_LONG).show();
 
 
                             // If sign in fails, display a message to the user.
-                           // Log.w(TAG, "signInWithCredential:failure", task.getException());
-                           // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                           // updateUI(null);
+                            // Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            // updateUI(null);
                         }
 
                         // ...
@@ -184,15 +171,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
                 });
 
 
-
     }
 
 
-
-
 }
-
-
 
 
 //

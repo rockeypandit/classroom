@@ -29,28 +29,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private Menu menu;
-
-    private FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-    List<String> mainlist,list;
+    List<String> mainlist, list;
     ArrayAdapter<String> test;
     ListView listView;
+    private Menu menu;
+    private FirebaseAuth mAuth;
 
 
-
-   // DocumentReference docRef = db.collection("USERS").document();
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
+    // DocumentReference docRef = db.collection("USERS").document();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -60,11 +48,16 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,19 +73,11 @@ public class MainActivity extends AppCompatActivity {
         list.add("abcdef");
         list.add("xyz");
         list.add("xzy");
-        mainlist=new ArrayList<>();
+        mainlist = new ArrayList<>();
 
 
-        listView=findViewById(R.id.list_item);
-        test = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1,mainlist);
-
-
-
-
-
-
-
-
+        listView = findViewById(R.id.list_item);
+        test = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, mainlist);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -100,43 +85,31 @@ public class MainActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null){
-                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                if (firebaseAuth.getCurrentUser() == null) {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
             }
         };
 
 
-
-
-
-
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
-
-
-
     }
-
-
-
 
 
     @Override
@@ -145,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         this.menu = menu;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 
             SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
@@ -163,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextChange(String changedText) {
                     mainlist.clear();
-                    for (String text:list) {
+                    for (String text : list) {
                         String newtext = text.toLowerCase();
                         if (newtext.startsWith(changedText)) {
                             mainlist.add(text);
@@ -178,33 +151,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         return true;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }
@@ -223,8 +170,7 @@ public class MainActivity extends AppCompatActivity {
             mAuth.signOut();
 
 
-
-           // Toast.makeText(getApplicationContext(),"SETTING",Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(),"SETTING",Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -260,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            TextView textView = rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
@@ -280,13 +226,16 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            switch(position){
-                case 0: Chats chatActivity = new Chats();
-                return chatActivity;
+            switch (position) {
+                case 0:
+                    Chats chatActivity = new Chats();
+                    return chatActivity;
 
-                case 1: Lectures lecturesActivity = new Lectures();
-                return lecturesActivity;
-                case 2: Doubts doubtActivity = new Doubts();
+                case 1:
+                    Lectures lecturesActivity = new Lectures();
+                    return lecturesActivity;
+                case 2:
+                    Doubts doubtActivity = new Doubts();
                     return doubtActivity;
                 default:
                     return null;

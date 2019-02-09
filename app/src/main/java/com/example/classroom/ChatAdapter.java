@@ -9,35 +9,29 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder>{
+public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
     List<ChatObject> lists;
     private Context context;
 
 
-
-    public  ChatAdapter(List<ChatObject> lists, Context context ){
+    public ChatAdapter(List<ChatObject> lists, Context context) {
         this.lists = lists;
         this.context = context;
     }
 
 
-
     @NonNull
     @Override
     public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_chats,null,false);
-        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_chats, null, false);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
-
-
-
-
 
 
         ChatViewHolder cvh = new ChatViewHolder(layoutView);
 
-         return cvh;
+        return cvh;
     }
 
     @Override

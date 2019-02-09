@@ -15,17 +15,6 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     private ArrayList<DataModel> dataModels;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView titleTextView;
-        ImageView thumbnailImageView;
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            this.titleTextView = itemView.findViewById(R.id.card_view_image_title);
-            this.thumbnailImageView = itemView.findViewById(R.id.card_view_image);
-        }
-    }
-
     public CustomAdapter(ArrayList<DataModel> data) {
         this.dataModels = data;
     }
@@ -64,5 +53,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public void updateList(ArrayList<DataModel> newList) {
         dataModels = newList;
         notifyDataSetChanged();
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView titleTextView;
+        ImageView thumbnailImageView;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            this.titleTextView = itemView.findViewById(R.id.card_view_image_title);
+            this.thumbnailImageView = itemView.findViewById(R.id.card_view_image);
+        }
     }
 }

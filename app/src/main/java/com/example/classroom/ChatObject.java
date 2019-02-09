@@ -1,17 +1,19 @@
 package com.example.classroom;
 
 public class ChatObject {
-    String userId,name,imageUrl;
+    String userId, name, imageUrl;
 
-    public ChatObject(String userId, String name,String imageUrl){
-        this.userId=userId;
-        this.name=name;
-        this.imageUrl=imageUrl;
+    public ChatObject(String userId, String name, String imageUrl) {
+        this.userId = userId;
+        this.name = name;
+        this.imageUrl = imageUrl;
 
     }
-    public String getUserId(){
+
+    public String getUserId() {
         return userId;
     }
+
     public void setUserId(String userId)
 
     {

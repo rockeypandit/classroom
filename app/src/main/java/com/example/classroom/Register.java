@@ -33,19 +33,17 @@ import java.util.List;
 import java.util.Map;
 
 public class Register extends AppCompatActivity {
-    FirebaseFirestore db ;
-    EditText uName,edtSchool;
-    String userName,exist = "temp",std;
+    FirebaseFirestore db;
+    EditText uName, edtSchool;
+    String userName, exist = "temp", std;
     TextView userAvail;
     boolean canexist;
-    Button c1Next,finish;
-    CardView c1,c2;
+    Button c1Next, finish;
+    CardView c1, c2;
     String school;
     Spinner standard;
-    DocumentReference mDocRefInfo,mDocRefUname;
+    DocumentReference mDocRefInfo, mDocRefUname;
     FirebaseUser currentUser;
-
-
 
 
     @Override
@@ -57,7 +55,7 @@ public class Register extends AppCompatActivity {
         userAvail = findViewById(R.id.userAvailable);
         userName = uName.getText().toString();
         c1Next = findViewById(R.id.c1Next);
-        c1= findViewById(R.id.c1);
+        c1 = findViewById(R.id.c1);
         c2 = findViewById(R.id.c2);
         edtSchool = findViewById(R.id.school);
         finish = findViewById(R.id.finish);
@@ -65,11 +63,9 @@ public class Register extends AppCompatActivity {
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-      //  Log.i("dATABASE",mDocRef.toString());
+        //  Log.i("dATABASE",mDocRef.toString());
         mDocRefInfo = FirebaseFirestore.getInstance().collection("USERS").document("userInfo");
         mDocRefUname = FirebaseFirestore.getInstance().collection("USERS").document("userNames");
-
-
 
 
         List<String> classes = new ArrayList<String>();
@@ -84,9 +80,6 @@ public class Register extends AppCompatActivity {
         standard.setAdapter(dataAdapterCategories);
 
 
-
-
-
         uName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -96,41 +89,41 @@ public class Register extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 userName = uName.getText().toString();
-                if(s.length()>3) {
+                if (s.length() > 3) {
 
                     mDocRefUname.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
-                              // Log.i("DOCCC",document.getData().get().toString());
-                               // document.get("userNames");
+                                // Log.i("DOCCC",document.getData().get().toString());
+                                // document.get("userNames");
                                 Map<String, Object> fetchData = document.getData();
                                 String buff = fetchData.toString();
-                                Log.i("datadd",fetchData.toString());
+                                Log.i("datadd", fetchData.toString());
 
-     //IF NOT WORKING PROPERLY
+                                //IF NOT WORKING PROPERLY
 
-                                try{
-                                    Log.i("userName",userName);
+                                try {
+                                    Log.i("userName", userName);
 
-                                    if (buff.contains(userName)){
+                                    if (buff.contains(userName)) {
 
-                                    Log.i("try11",document.getString(userName));
+                                        Log.i("try11", document.getString(userName));
 
-                                    userAvail.setText("@" + userName + "  Not Available");
-                                    userAvail.setTextColor(Color.RED);
-                                    canexist = false;
-                                } else {
-                                    userAvail.setText("@" + userName + " Available");
-                                    userAvail.setTextColor(Color.GREEN);
-                                    canexist = true;
+                                        userAvail.setText("@" + userName + "  Not Available");
+                                        userAvail.setTextColor(Color.RED);
+                                        canexist = false;
+                                    } else {
+                                        userAvail.setText("@" + userName + " Available");
+                                        userAvail.setTextColor(Color.GREEN);
+                                        canexist = true;
 
 
-                                }}catch (Exception e){
+                                    }
+                                } catch (Exception e) {
                                     userAvail.setText("");
                                 }
-
 
 
                             } else {
@@ -138,10 +131,6 @@ public class Register extends AppCompatActivity {
                             }
                         }
                     });
-
-
-
-
 
 
 //                    db.collection("USERS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -157,7 +146,7 @@ public class Register extends AppCompatActivity {
 //                    });
 
 
-                }else
+                } else
                     userAvail.setText("");
 
 
@@ -170,18 +159,15 @@ public class Register extends AppCompatActivity {
         });
 
 
-
         c1Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userName.length()>4) {
+                if (userName.length() > 4) {
                     c1.setVisibility(View.GONE);
                     c2.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     uName.setError("username should be more than 3 character");
                 }
-
 
 
             }
@@ -189,25 +175,24 @@ public class Register extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                school=edtSchool.getText().toString();
+                school = edtSchool.getText().toString();
                 std = standard.getSelectedItem().toString();
-                if (school.length()<4)
+                if (school.length() < 4)
                     edtSchool.setError("invalid");
-                else
-                {
+                else {
 
 
                     Map<String, Object> user = new HashMap<>();
-                    user.put("username",userName);
+                    user.put("username", userName);
                     user.put("Standard", std);
-                    user.put("School",school);
+                    user.put("School", school);
 
                     Map<String, Object> userNameMap = new HashMap<>();
-                    userNameMap.put(currentUser.getUid(),userName);
+                    userNameMap.put(currentUser.getUid(), userName);
 
 
-                  //  db.collection("USERS").add(crrNameMap);
-                    db.collection("USERS").document(currentUser.getUid()).set(user,SetOptions.merge());
+                    //  db.collection("USERS").add(crrNameMap);
+                    db.collection("USERS").document(currentUser.getUid()).set(user, SetOptions.merge());
 
 
 //                    mDocRefInfo.set(user, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -231,7 +216,7 @@ public class Register extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void Void) {
 
-                            Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
 
 
                             startActivity(i);
@@ -248,31 +233,11 @@ public class Register extends AppCompatActivity {
                     });
 
 
-
-
-
-
-
-
-
-
-
-
                 }
 
 
             }
         });
-
-
-
-
-
-
-
-
-
-
 
 
     }

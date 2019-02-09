@@ -41,10 +41,10 @@ public class Lectures extends Fragment {
     private static CustomAdapter mAdapter;
     private static ArrayList<DataModel> data;
     private static FirebaseFirestore firestore;
+    private static List<DocumentSnapshot> documentSnapshots;
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton addLectureFAB;
     private TextInputEditText searchEditText;
-    private static List<DocumentSnapshot> documentSnapshots;
 
     @Nullable
     @Override

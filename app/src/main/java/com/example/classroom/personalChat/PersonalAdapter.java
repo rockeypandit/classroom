@@ -13,18 +13,16 @@ import com.example.classroom.R;
 
 import java.util.List;
 
-public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder>{
+public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder> {
 
     List<PersonalObject> chatLists;
     private Context context;
 
 
-
-    public PersonalAdapter(List<PersonalObject> lists, Context context ){
+    public PersonalAdapter(List<PersonalObject> lists, Context context) {
         this.chatLists = lists;
         this.context = context;
     }
-
 
 
     @NonNull
@@ -32,28 +30,24 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder>{
     public PersonalViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         //INFLATER
-        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_chat,null,false);
-        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_chat, null, false);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
-
-
-
-
 
 
         PersonalViewHolder cvh = new PersonalViewHolder(layoutView);
 
-         return cvh;
+        return cvh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull PersonalViewHolder chatViewHolder, int i) {
         chatViewHolder.mMessage.setText(chatLists.get(i).getMessage());
-        if (chatLists.get(i).getCurrentUser()){
+        if (chatLists.get(i).getCurrentUser()) {
             chatViewHolder.mMessage.setGravity(Gravity.END);
             chatViewHolder.mMessage.setTextColor(Color.parseColor("#404040"));
             chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#F4F4F4"));
-        }else {
+        } else {
             chatViewHolder.mMessage.setGravity(Gravity.START);
             chatViewHolder.mMessage.setTextColor(Color.parseColor("#FFFFFF"));
             chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#2DB4C8"));

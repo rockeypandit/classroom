@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.example.classroom.personalChat.PersonalChat;
 
 public class ChatViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    public TextView mChatId,mChatName;
+    public TextView mChatId, mChatName;
     ImageView mChatImage;
 
     public ChatViewHolder(@NonNull View itemView) {
@@ -26,7 +26,7 @@ public class ChatViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public void onClick(View v) {
         Intent intent = new Intent(v.getContext(), PersonalChat.class);
         Bundle b = new Bundle();
-        b.putString("chatId",mChatId.getText().toString());
+        b.putString("chatId", mChatId.getText().toString());
         intent.putExtras(b);
         v.getContext().startActivity(intent);
 

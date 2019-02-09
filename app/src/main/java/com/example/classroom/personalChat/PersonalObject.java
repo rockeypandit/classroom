@@ -3,9 +3,10 @@ package com.example.classroom.personalChat;
 public class PersonalObject {
     String message;
     Boolean currentUser;
-    public PersonalObject(String message,Boolean currentUser){
-            this.message = message;
-            this.currentUser=currentUser;
+
+    public PersonalObject(String message, Boolean currentUser) {
+        this.message = message;
+        this.currentUser = currentUser;
     }
 
     public String getMessage() {
