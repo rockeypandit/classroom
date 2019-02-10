@@ -60,11 +60,11 @@ public class SplashScreen extends AppCompatActivity {
                     } finally {
 
                        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
-                           Intent gotoLogin = new Intent(SplashScreen.this, LoginActivity.class);
+                           Intent gotoLogin = new Intent(SplashScreen.this, MainActivity.class);
                            startActivity(gotoLogin);
                         }
                         else {
-                           Intent gotoRegistration = new Intent(SplashScreen.this, Register.class);
+                           Intent gotoRegistration = new Intent(SplashScreen.this, LoginActivity.class);
                            startActivity(gotoRegistration);
                        }
 
