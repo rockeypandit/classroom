@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/questionEditText"
-        android:layout_width="399dp"
+        android:layout_width="377dp"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Enter Question"
@@ -17,14 +18,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="5dp" />
+        tools:layout_editor_absoluteY="16dp" />
 
     <EditText
         android:id="@+id/keywordsEditText"
-        android:layout_width="399dp"
+        android:layout_width="377dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Enter Keywords, seperate by commas"
         android:inputType="textPersonName"
@@ -35,25 +34,23 @@
 
     <EditText
         android:id="@+id/answerEditText"
-        android:layout_width="399dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="377dp"
+        android:layout_height="170dp"
         android:ems="10"
         android:hint="Enter answer here."
         android:inputType="textMultiLine"
-        app:layout_constraintTop_toBottomOf="@+id/keywordsEditText"
-        tools:layout_editor_absoluteX="6dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/keywordsEditText" />
 
     <Button
         android:id="@+id/submitButton"
-        android:layout_width="387dp"
+        android:layout_width="227dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="SUBMIT DOUBT"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

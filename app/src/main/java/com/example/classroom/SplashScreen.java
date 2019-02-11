@@ -19,7 +19,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        ImageView imgLogo = (ImageView) findViewById(R.id.imglogo);
+        ImageView imgLogo = findViewById(R.id.imglogo);
         Animation slideup = AnimationUtils.loadAnimation(this, R.anim.slide_up);
         imgLogo.startAnimation(slideup);
         final ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -59,14 +59,13 @@ public class SplashScreen extends AppCompatActivity {
                         e.printStackTrace();
                     } finally {
 
-                       if(FirebaseAuth.getInstance().getCurrentUser()!=null){
-                           Intent gotoLogin = new Intent(SplashScreen.this, MainActivity.class);
-                           startActivity(gotoLogin);
+                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                            Intent gotoLogin = new Intent(SplashScreen.this, MainActivity.class);
+                            startActivity(gotoLogin);
+                        } else {
+                            Intent gotoRegistration = new Intent(SplashScreen.this, LoginActivity.class);
+                            startActivity(gotoRegistration);
                         }
-                        else {
-                           Intent gotoRegistration = new Intent(SplashScreen.this, LoginActivity.class);
-                           startActivity(gotoRegistration);
-                       }
 
                     }
                     finish();

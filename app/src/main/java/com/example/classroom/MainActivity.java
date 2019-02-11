@@ -1,6 +1,9 @@
 package com.example.classroom;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         this.menu = menu;
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 
             SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
@@ -148,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
             });
 
-        }*/
+        }
         return true;
     }
 
@@ -160,27 +164,26 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
 
-        //LOGOUT BUTTON
-
         if (id == R.id.action_settings) {
-            mAuth.signOut();
-
-
-            // Toast.makeText(getApplicationContext(),"SETTING",Toast.LENGTH_SHORT).show();
+            //Start setting activity from here
+            Toast.makeText(getApplicationContext(), "Settings Panel", Toast.LENGTH_SHORT);
             return true;
         }
 
+        if (id == R.id.action_admin_panel) {
+            Toast.makeText(getApplicationContext(), "ADMIN Panel", Toast.LENGTH_SHORT);
+            return true;
+        }
+
+        if (id == R.id.action_logout) {
+            mAuth.signOut();
+            // Toast.makeText(getApplicationContext(),"SETTING",Toast.LENGTH_SHORT).show();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {

@@ -1,30 +1,36 @@
 package com.example.classroom;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Doubts extends Fragment {
     private static RecyclerView doubtRecyclerView;
@@ -68,7 +74,11 @@ public class Doubts extends Fragment {
 
                             if (!documentSnapshots.isEmpty()) {
                                 for (DocumentSnapshot snapshot : documentSnapshots) {
-                                    data.add(new DoubtModel(snapshot.get("question").toString(), snapshot.get("answer").toString()));
+                                    if (snapshot.get("answer") != null) {
+                                        data.add(new DoubtModel(snapshot.get("question").toString(), snapshot.get("answer").toString()));
+                                    } else {
+                                        data.add(new DoubtModel(snapshot.get("question").toString()));
+                                    }
                                 }
                             }
                             mAdapter.updateList(data);
@@ -132,9 +142,68 @@ public class Doubts extends Fragment {
 
         @Override
         public void onClick(final View v) {
-            //TODO: Add here code for showing add_doubt activity.
-            Intent intent = new Intent(context, AddDoubt.class);
-            v.getContext().startActivity(intent);
+            Doubts.showAddQuestionDialog(v);
+            //Intent intent = new Intent(context, AddDoubt.class);
+            //v.getContext().startActivity(intent);
         }
+    }
+
+    public static void showAddQuestionDialog(final View v) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(v.getContext());
+        final EditText quesEditText = new EditText(v.getContext());
+        dialogBuilder.setTitle("Add New Question");
+        dialogBuilder.setView(quesEditText);
+
+        dialogBuilder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String quesiton = quesEditText.getText().toString();
+
+                Map<String, String> doubtData = new HashMap<>();
+                doubtData.put("question", quesiton);
+
+                firestore.collection("doubts").add(doubtData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Snackbar succeSnackbar = Snackbar.make(v, "Successfully Added new Lecture.", Snackbar.LENGTH_SHORT);
+                        succeSnackbar.show();
+                    }
+                });
+                Doubts.loadDoubtsfromDB();
+            }
+        });
+
+        dialogBuilder.create();
+        dialogBuilder.show();
+    }
+
+    public static void loadDoubtsfromDB() {
+        final ArrayList<DoubtModel> dataSet = new ArrayList<>();
+        firestore.collection("doubts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    task.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            documentSnapshots = queryDocumentSnapshots.getDocuments();
+
+                            if (!documentSnapshots.isEmpty()) {
+                                for (DocumentSnapshot snapshot : documentSnapshots) {
+                                    if (snapshot.get("answer") != null) {
+                                        dataSet.add(new DoubtModel(snapshot.get("question").toString(), snapshot.get("answer").toString()));
+                                    } else {
+                                        dataSet.add(new DoubtModel(snapshot.get("question").toString()));
+                                    }
+                                }
+                            }
+                            mAdapter.updateList(dataSet);
+                        }
+                    });
+                } else {
+                    Log.d("DB ERROR", "Cannot load doubts.");
+                }
+            }
+        });
     }
 }

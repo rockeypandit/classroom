@@ -53,6 +53,7 @@ public class AddDoubt extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             Snackbar succesSnackbar = Snackbar.make(v, "Successfully Added Doubt.", Snackbar.LENGTH_SHORT);
                             succesSnackbar.show();
+                            Doubts.loadDoubtsfromDB();
                             startActivity(new Intent(v.getContext(), MainActivity.class));
                         }
                     });

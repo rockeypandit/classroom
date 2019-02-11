@@ -10,6 +10,10 @@ public class DoubtModel {
     List<String> tags;
     List<Image> images;
 
+    public DoubtModel(String question) {
+        this.question = question;
+    }
+
     public DoubtModel(String question, String answer) {
         this.question = question;
         this.answer = answer;
@@ -19,12 +23,24 @@ public class DoubtModel {
         return this.question;
     }
 
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
     public String getAnswer() {
         return this.answer;
     }
 
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
     public List<Image> getImages() {
         return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public List<String> getTags() {
@@ -33,17 +49,5 @@ public class DoubtModel {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
-    }
-
-    public void setImages(List<Image> images) {
-        this.images = images;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
     }
 }
