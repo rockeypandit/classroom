@@ -37,14 +37,27 @@ public class Register extends AppCompatActivity {
     EditText uName, edtSchool;
     String userName, exist = "temp", std;
     TextView userAvail;
-    boolean canexist;
+    boolean canexist;)
+    c1 =
     Button c1Next, finish;
+    edtSchool =
     CardView c1, c2;
+    finish =
     String school;
+    user =
     Spinner user;
+
+    currentUser =FirebaseAuth.getInstance().ge
     DocumentReference mDocRefInfo, mDocRefUname;
     FirebaseUser currentUser;
 
+    findViewById(R.id.c1);
+
+    findViewById(R.id.school);
+
+    findViewById(R.id.finish);
+
+    findViewById(R.id.user);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +66,7 @@ public class Register extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         uName = findViewById(R.id.uname);
         userAvail = findViewById(R.id.userAvailable);
-        userName = uName.getText().toString();
-        c1 = findViewById(R.id.c1);
-        edtSchool = findViewById(R.id.school);
-        finish = findViewById(R.id.finish);
-        user = findViewById(R.id.user);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userName = uName.getText().toString(tCurrentUser();
 
         //  Log.i("dATABASE",mDocRef.toString());
         mDocRefInfo = FirebaseFirestore.getInstance().collection("USERS").document("userInfo");

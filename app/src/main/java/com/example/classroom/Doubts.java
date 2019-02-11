@@ -2,6 +2,7 @@ package com.example.classroom;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -20,8 +21,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,6 +41,7 @@ public class Doubts extends Fragment {
     private static DoubtAdapter mAdapter;
     private static ArrayList<DoubtModel> data;
     private static FirebaseFirestore firestore;
+    private static FirebaseUser currentUser;
     private static List<DocumentSnapshot> documentSnapshots;
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton addDoubtFAB;
@@ -45,6 +50,7 @@ public class Doubts extends Fragment {
     @javax.annotation.Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         firestore = FirebaseFirestore.getInstance();
         View view = inflater.inflate(R.layout.doubt, container, false);
         searchEditText = view.findViewById(R.id.doubts_search_input);
@@ -142,9 +148,25 @@ public class Doubts extends Fragment {
 
         @Override
         public void onClick(final View v) {
-            Doubts.showAddQuestionDialog(v);
-            //Intent intent = new Intent(context, AddDoubt.class);
-            //v.getContext().startActivity(intent);
+            firestore.collection("users").document(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot docSnap = task.getResult();
+                    if (docSnap.get("position").toString() == "STUDENT") {
+                        showAddQuestionDialog(v);
+                    } else if (docSnap.get("position").toString() == "MASTER") {
+                        Intent intent = new Intent(context, AddDoubt.class);
+                        v.getContext().startActivity(intent);
+                    } else {
+                        showAddQuestionDialog(v);
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    showAddQuestionDialog(v);
+                }
+            });
         }
     }
 
