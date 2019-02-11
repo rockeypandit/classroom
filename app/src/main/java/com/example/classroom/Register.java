@@ -68,7 +68,7 @@ public class Register extends AppCompatActivity {
 
         List<String> classes = new ArrayList<String>();
         classes.add("STUDENT");
-        classes.add("TEACHER");
+        classes.add("MASTER");
 
 
         ArrayAdapter<String> dataAdapterCategories = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, classes);
@@ -155,7 +155,6 @@ public class Register extends AppCompatActivity {
         });
 
 
-
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,7 +167,7 @@ public class Register extends AppCompatActivity {
 
                     Map<String, Object> user = new HashMap<>();
                     user.put("username", userName);
-                    user.put("user", std);
+                    user.put("position", std);
                     user.put("School", school);
 
                     Map<String, Object> userNameMap = new HashMap<>();
