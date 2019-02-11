@@ -6,9 +6,22 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".Chats">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:inputType="text"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="-10dp"
+        android:hint="SEARCH FRIENDS"
+        android:id="@+id/editSearch"/>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
+
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

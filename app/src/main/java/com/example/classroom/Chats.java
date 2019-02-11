@@ -28,11 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 public class Chats extends Fragment {
-
+    FirebaseFirestore db;
     DocumentSnapshot document;
+    DocumentSnapshot myFriendList;
+
     String currentUserId;
     boolean flag;
-    Map<String, Object> documentData;
+    Map<String, Object> documentData,mapFriendList;
     String temp;
     String[] arr1;
     String[] arr2 = new String[2];
@@ -60,14 +62,13 @@ public class Chats extends Fragment {
         //mDatabase.child("User").child("Chat").setValue("data");
 
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         Map<String, Object> data = new HashMap<>();
         data.put(currentUserId, "hi");
         // db.collection("USERS").add(data);
         DocumentReference chatId = db.collection("USERS").document("Chat").collection("PersonalChats").document();
-
-
+        final DocumentReference docFriendList = db.collection("USERS").document("userNames");
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(true);
@@ -113,7 +114,7 @@ public class Chats extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
 
-                    document = task.getResult();
+                     document = task.getResult();
                     documentData = document.getData();
                     Log.i("DOCUMENT DATA", documentData.toString());
                     String[] listArr = documentData.toString().split(",");
@@ -132,7 +133,7 @@ public class Chats extends Fragment {
 //                            }
 
                             arr1[0] = arr1[0].replaceAll("\\{", " ");
-                            Log.i("Final usernames 0", arr1[0]);
+                          //  Log.i("Final usernames 0", arr1[0]);
 
 
                             arr1[1] = arr1[1].replaceAll("\\}", " ");
@@ -153,11 +154,18 @@ public class Chats extends Fragment {
                         }
                         if (arr2[0] != null && temp != arr2[0]) {
                             temp = arr2[0];
+                            if (!(arr2[0].equals(currentUserId)))
+                            {
                             friendList.add(arr2[0]);
+                            }
                         }
 
 
                     }
+
+
+
+
 
 
                     //  Log.i("VALUES",listArr[i]);
@@ -178,9 +186,54 @@ public class Chats extends Fragment {
 
                     //Log.i("FRIENDS",friendList.get(0));
 
-                    for (int i = 0; i < friendList.size(); i++) {
-                        Log.i("FRIENDS", friendList.get(i));
-                    }
+//
+//                    docFriendList.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                myFriendList = task.getResult();
+//                                mapFriendList=myFriendList.getData();
+//                                if (myFriendList.exists()) {
+//
+//                                    Log.i("error", myFriendList.getData().toString());
+//
+//                                } else {
+//                                    Log.i("error", "No such document");
+//                                }
+//                            } else {
+//                                Log.d("GETTING", "get failed with ", task.getException());
+//                            }
+//
+//                    }}).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.i("GETTING error", "get failed with " + e.getMessage() );
+//                        }
+//                    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   // resultsChats.add()
+
+
 
 
                     if (document.exists()) {
@@ -192,6 +245,44 @@ public class Chats extends Fragment {
                 }
             }
         });
+
+
+        DocumentReference docRef = db.collection("USERS").document("userNames");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        myFriendList = document;
+                        document.get("Togo6iDmMBRNNqZqMvzFKxoyI9a2");
+                        Log.d("my DATA", "DocumentSnapshot data: " + document.get("Togo6iDmMBRNNqZqMvzFKxoyI9a2"));
+                    } else {
+                        Log.d("ERROR", "No such document");
+                    }
+                } else {
+                    Log.d("ERROR", "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+
+       // Map<String , Object> mapFriend = new HashMap<>();
+        for (int i = 0; i < friendList.size(); i++) {
+
+          //  resultsChats.add(myFriendList.get(friendList.get(i)).toString());
+            //friendList.add(myFriendList.get())
+            Log.i("FRIENDS",myFriendList.get(friendList.get(i)).toString());
+//                        Log.i("FRIENDS", myFriendList.toString());
+
+            // mapFriend = myFriendList.getData();
+            // Log.i("FRIENDS",myFriendList.get("ajzCuGB2fobxxGLsvJuvRUK8YQ92").toString());
+
+
+            //   Log.i("FRIENDS", myFriendList.get(friendList.get(i)).toString());
+        }
+
 
         //AFTER SEARCH ITEM CLICKED
 

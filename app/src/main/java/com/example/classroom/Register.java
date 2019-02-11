@@ -41,7 +41,7 @@ public class Register extends AppCompatActivity {
     Button c1Next, finish;
     CardView c1, c2;
     String school;
-    Spinner standard;
+    Spinner user;
     DocumentReference mDocRefInfo, mDocRefUname;
     FirebaseUser currentUser;
 
@@ -57,7 +57,7 @@ public class Register extends AppCompatActivity {
         c1 = findViewById(R.id.c1);
         edtSchool = findViewById(R.id.school);
         finish = findViewById(R.id.finish);
-        standard = findViewById(R.id.standard);
+        user = findViewById(R.id.user);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -67,15 +67,13 @@ public class Register extends AppCompatActivity {
 
 
         List<String> classes = new ArrayList<String>();
-        classes.add("VIII");
-        classes.add("IX");
-        classes.add("X");
-        classes.add("XI");
-        classes.add("XII");
+        classes.add("STUDENT");
+        classes.add("TEACHER");
+
 
         ArrayAdapter<String> dataAdapterCategories = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, classes);
         dataAdapterCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        standard.setAdapter(dataAdapterCategories);
+        user.setAdapter(dataAdapterCategories);
 
 
         uName.addTextChangedListener(new TextWatcher() {
@@ -162,7 +160,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 school = edtSchool.getText().toString();
-                std = standard.getSelectedItem().toString();
+                std = user.getSelectedItem().toString();
                 if (school.length() < 4)
                     edtSchool.setError("invalid");
                 else {
@@ -170,7 +168,7 @@ public class Register extends AppCompatActivity {
 
                     Map<String, Object> user = new HashMap<>();
                     user.put("username", userName);
-                    user.put("Standard", std);
+                    user.put("user", std);
                     user.put("School", school);
 
                     Map<String, Object> userNameMap = new HashMap<>();

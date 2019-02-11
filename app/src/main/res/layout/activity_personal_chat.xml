@@ -37,6 +37,12 @@
             android:layout_height="wrap_content"
             android:hint="Message"
             android:id="@+id/message"/>
+        <Button
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="file"
+            android:id="@+id/attach"/>
 
         <Button
             android:layout_weight="0.3"
