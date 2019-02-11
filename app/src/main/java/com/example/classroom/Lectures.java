@@ -22,8 +22,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +43,7 @@ public class Lectures extends Fragment {
     private static RecyclerView lecturesRecyclerView;
     private static CustomAdapter mAdapter;
     private static ArrayList<DataModel> data;
+    private FirebaseUser currentUser;
     private static FirebaseFirestore firestore;
     private static List<DocumentSnapshot> documentSnapshots;
     private RecyclerView.LayoutManager layoutManager;
@@ -49,6 +53,7 @@ public class Lectures extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         firestore = FirebaseFirestore.getInstance();
         View view = inflater.inflate(R.layout.lectures, container, false);
         searchEditText = view.findViewById(R.id.lectures_search_input);
@@ -64,6 +69,19 @@ public class Lectures extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        firestore.collection("users").document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.get("position").toString() == "STUDENT") {
+                    addLectureFAB.hide();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                addLectureFAB.hide();
+            }
+        });
 
         data = new ArrayList();
         firestore.collection("lectures").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
