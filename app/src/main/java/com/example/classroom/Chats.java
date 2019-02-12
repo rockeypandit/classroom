@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,17 +34,23 @@ public class Chats extends Fragment {
     FirebaseFirestore db;
     DocumentSnapshot document;
     DocumentSnapshot myFriendList;
-
+    AutoCompleteTextView searchbar;
+    Map<String, Object> storeChatId;
     String currentUserId;
-    boolean flag;
+    boolean flag,flagInternet = false;
+    String[] totalUnames;
     Map<String, Object> documentData,mapFriendList;
-    String temp;
+    String temp,key;
     String[] arr1;
     String[] arr2 = new String[2];
+    String friendUid ;//= "AhS3B153mOXhbukgYLV4wGqfggf2";
+    DocumentReference chatId;
     List<String> friendList;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mChatAdapter;
     private RecyclerView.LayoutManager mChatLayoutManager;
+    List<String> fl = new ArrayList<>();
+
     //FIREBASE
     private DatabaseReference mDatabase;
     private ArrayList<ChatObject> resultsChats = new ArrayList<ChatObject>();
@@ -49,14 +58,16 @@ public class Chats extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.chat, container, false);
+        final View view = inflater.inflate(R.layout.chat, container, false);
         friendList = new ArrayList<>();
+
+        searchbar = view.findViewById(R.id.search_bar);
 
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
+friendUid=currentUserId;
         //FIREBASE
-        String key = FirebaseDatabase.getInstance().getReference().child("CHhat").push().getKey();
+         key = FirebaseDatabase.getInstance().getReference().child("CHhat").push().getKey();
         Log.i("KEY", key);
 
         //mDatabase.child("User").child("Chat").setValue("data");
@@ -67,7 +78,7 @@ public class Chats extends Fragment {
         Map<String, Object> data = new HashMap<>();
         data.put(currentUserId, "hi");
         // db.collection("USERS").add(data);
-        DocumentReference chatId = db.collection("USERS").document("Chat").collection("PersonalChats").document();
+         chatId = db.collection("USERS").document("Chat").collection("PersonalChats").document();
         final DocumentReference docFriendList = db.collection("USERS").document("userNames");
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -83,11 +94,7 @@ public class Chats extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
 
-        ChatObject obj = new ChatObject("userID", "NAME", "IMAGE");
 
-
-        for (int i = 0; i < 100; i++)
-            resultsChats.add(obj);
 
 
         mChatAdapter.notifyDataSetChanged();
@@ -100,10 +107,9 @@ public class Chats extends Fragment {
 
         flag = true;
 
-        Map<String, Object> storeChatId = new HashMap<>();
+         storeChatId = new HashMap<>();
 
 
-        final String friendUid = "AhS3B153mOXhbukgYLV4wGqfggf2";
 
         documentData = new HashMap<>();
 
@@ -228,82 +234,254 @@ public class Chats extends Fragment {
 
 
 
+                    final Map<String , Object> mapFriend = new HashMap<>();
+                    for (int i = 0; i < friendList.size(); i++) {
 
-
-
-                   // resultsChats.add()
-
-
-
-
-                    if (document.exists()) {
-                        Log.i("DATA RECEIVED", document.toString());
-                        if (document.contains(currentUserId)) ;
-                        flag = false;
-
-                    }
-                }
-            }
-        });
-
-
-        DocumentReference docRef = db.collection("USERS").document("userNames");
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        myFriendList = document;
-                        document.get("Togo6iDmMBRNNqZqMvzFKxoyI9a2");
-                        Log.d("my DATA", "DocumentSnapshot data: " + document.get("Togo6iDmMBRNNqZqMvzFKxoyI9a2"));
-                    } else {
-                        Log.d("ERROR", "No such document");
-                    }
-                } else {
-                    Log.d("ERROR", "get failed with ", task.getException());
-                }
-            }
-        });
-
-
-
-       // Map<String , Object> mapFriend = new HashMap<>();
-        for (int i = 0; i < friendList.size(); i++) {
-
-          //  resultsChats.add(myFriendList.get(friendList.get(i)).toString());
-            //friendList.add(myFriendList.get())
-            Log.i("FRIENDS",myFriendList.get(friendList.get(i)).toString());
+                        //resultsChats.add(myFriendList.get(friendList.get(i)).toString());
+                        Log.i("FRIENDS",friendList.get(i));
 //                        Log.i("FRIENDS", myFriendList.toString());
 
-            // mapFriend = myFriendList.getData();
-            // Log.i("FRIENDS",myFriendList.get("ajzCuGB2fobxxGLsvJuvRUK8YQ92").toString());
+                       // mapFriend = myFriendList.getData();
+                       // Log.i("FRIENDS",myFriendList.get("ajzCuGB2fobxxGLsvJuvRUK8YQ92").toString());
 
 
-            //   Log.i("FRIENDS", myFriendList.get(friendList.get(i)).toString());
-        }
+                     //   Log.i("FRIENDS", myFriendList.get(friendList.get(i)).toString());
+                    }
 
+
+                    DocumentReference docRef = db.collection("USERS").document("userNames");
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document1 = task.getResult();
+                                myFriendList=document1;
+
+
+                                if (document1.exists()) {
+                                    view.findViewById(R.id.progress).setVisibility(View.GONE);
+                                    view.findViewById(R.id.relativeChat).setVisibility(View.VISIBLE);
+                                    Log.d("my DATA", "DocumentSnapshot data: " + document1.getData());
+
+                                    for (int i = 0; i < friendList.size(); i++) {
+                                        temp = friendList.get(i);
+                                        Log.i("ERROR12", temp);
+                                        fl.add(myFriendList.get(friendList.get(i)).toString());
+
+
+
+
+
+                                        ChatObject obj = new ChatObject("userID", fl.get(i), "IMAGE");
+
+                                            resultsChats.add(obj);
+
+
+
+                                       // fl.add(document.get(temp).toString());
+                                        Log.i("fl", fl.get(i));
+
+                                    }
+
+
+                                    view.findViewById(R.id.progress).setVisibility(View.GONE);
+                                    flag=true;
+
+
+
+
+
+                                } else {
+
+
+                                    Log.d("ERROR", "No such document");
+                                }
+
+
+
+
+
+
+                                Log.i("total usernames",myFriendList.toString());
+                                final Map<String , Object> mapToatal = myFriendList.getData();
+
+                                final List<String> keyList = new ArrayList<String>(mapToatal.keySet());
+
+                                Log.i("KEYS",keyList.size()+"");
+                                totalUnames = mapToatal.values().toArray(new String[0]);
+
+//                                for (int i =0;i<l.size();i++)
+//                                    Log.i(l.get(i),totalUnames[i]);
+
+
+
+                               // BiMap<String, Object> biMap = HashBiMap.create();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                totalUnames = mapToatal.values().toArray(new String[0]);
+                                ArrayAdapter adapter = new ArrayAdapter(getContext(),android.R.layout.simple_list_item_1,totalUnames);
+                                searchbar.setAdapter(adapter);
+
+
+
+//                                searchbar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                                    @Override
+//                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                                        Log.i("CLICKED",totalUnames[position]);                                    }
+//
+//                                    @Override
+//                                    public void onNothingSelected(AdapterView<?> parent) {
+//
+//                                    }
+//                                });
+                                searchbar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Log.i("CLICKED",searchbar.getText().toString());
+                                        int index = -1;
+                                        for (int i=0;i<totalUnames.length;i++) {
+                                            if (totalUnames[i].equals(searchbar.getText().toString())) {
+                                                index = i;
+                                                break;
+                                            }
+                                        }
+                                        Log.i(searchbar.getText().toString(),keyList.get(index));
+
+
+
+                                        if (document.exists()) {
+                                            Log.i("DATA RECEIVED", document.toString());
+                                            if (document.contains(currentUserId)) ;
+                                            flag = false;
+
+                                        }
+
+
+                                        friendUid = keyList.get(index);
+                                        flag=true;
+
+
+
+
+
+                                    }
+                                });
+
+
+                            } else {
+                                Log.d("ERROR", "get failed with ", task.getException());
+                            }
+                        }
+                    });
+//                    String temp;
+//                    for (int i = 0; i < friendList.size(); i++) {
+//                        temp = friendList.get(i);
+//                        Log.i("ERROR12", temp);
+//
+//
+//                        fl.add(document.get(temp).toString());
+//                        Log.i("ERROR12", fl.get(i));
+//
+//                    }
+
+
+
+                    // resultsChats.add()
+
+
+                    view.findViewById(R.id.btnSelect).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.i("RUNNIONNG" , "true");
+
+                            if (flag) {
+
+                                Log.i("RUNNIONNG" , "true");
+
+                                storeChatId.put(currentUserId + " | " + friendUid, key);
+                                //db.collection("USERS").document(currentUserId).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
+                                db.collection("USERS").document(currentUserId).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
+
+                                Log.i("CHATID2", chatId.toString());
+
+
+                                // CHAT FRIEND ID
+
+
+                                // db.collection("USERS").document(friendUid).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
+                                db.collection("USERS").document(friendUid).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
+
+                            }
+                        }
+                    });
+
+
+
+
+
+                }
+            }
+        });
 
         //AFTER SEARCH ITEM CLICKED
 
 
-        if (flag) {
 
 
-            storeChatId.put(currentUserId + " | " + friendUid, key);
-            //db.collection("USERS").document(currentUserId).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
-            db.collection("USERS").document(currentUserId).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
-
-            Log.i("CHATID2", chatId.toString());
 
 
-            // CHAT FRIEND ID
 
 
-            // db.collection("USERS").document(friendUid).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
-            db.collection("USERS").document(friendUid).collection("Friends").document("Lists").set(storeChatId, SetOptions.merge());
 
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //SEARCH BAR
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         return view;
