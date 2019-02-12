@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
         android:id="@+id/scrollView"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/sendLayout">
+
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recyclerView"
             android:scrollbars="vertical">
-
-
 
 
         </android.support.v7.widget.RecyclerView>
@@ -32,24 +28,25 @@
 
 
         <EditText
+            android:id="@+id/message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="0.7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Message"
-            android:id="@+id/message"/>
-        <Button
-            android:layout_weight="0.3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="file"
-            android:id="@+id/attach"/>
+            android:hint="Message" />
 
         <Button
-            android:layout_weight="0.3"
+            android:id="@+id/attach"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="SEND"
-            android:id="@+id/send"/>
+            android:layout_weight="0.3"
+            android:text="file" />
+
+        <Button
+            android:id="@+id/send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="SEND" />
 
 
     </LinearLayout>

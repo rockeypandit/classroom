@@ -2,9 +2,10 @@ package com.example.classroom;
 
 import android.media.Image;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DoubtModel {
+public class DoubtModel implements Serializable {
     String question;
     String answer;
     List<String> tags;

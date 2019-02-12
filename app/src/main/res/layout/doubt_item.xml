@@ -8,9 +8,11 @@
     <TextView
         android:id="@+id/questionTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/common_google_signin_btn_text_dark_default"
         android:text="Question"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@color/colorPrimary"
         android:textSize="24dp"
         tools:layout_editor_absoluteX="136dp"
         tools:layout_editor_absoluteY="177dp" />

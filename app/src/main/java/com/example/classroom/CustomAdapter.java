@@ -24,7 +24,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
 
         view.setOnClickListener(new Lectures.OnCardClickListener(view.getContext()));
-
+        view.setOnLongClickListener(new Lectures.OnCardLongClickListener(view.getContext()));
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }

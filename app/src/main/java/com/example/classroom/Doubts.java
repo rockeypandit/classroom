@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,6 +27,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -133,9 +135,50 @@ public class Doubts extends Fragment {
         }
 
         @Override
-        public void onClick(View v) {
-            Snackbar doubtSnackbar = Snackbar.make(v, "Item Pressed.", Snackbar.LENGTH_SHORT);
-            doubtSnackbar.show();
+        public void onClick(final View v) {
+            int itemPos = doubtRecyclerView.getChildLayoutPosition(v);
+            DoubtModel doubt = data.get(itemPos);
+            Intent intent = new Intent(context, ShowDoubt.class);
+            intent.putExtra("doubt", doubt);
+            context.startActivity(intent);
+        }
+    }
+
+    public static class OnDoubtItemLongClickListener implements View.OnLongClickListener {
+        private final Context context;
+
+        public OnDoubtItemLongClickListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public boolean onLongClick(final View v) {
+            int itemPos = doubtRecyclerView.getChildLayoutPosition(v);
+
+            final CollectionReference collection = firestore.collection("doubts");
+            firestore.collection("doubts")
+                    .whereEqualTo("question", data.get(itemPos).getQuestion())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                    collection.document(documentSnapshot.getId()).delete()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    Toast.makeText(context, "Doubt Deleted.", Toast.LENGTH_SHORT);
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    });
+            data.remove(itemPos);
+            mAdapter.notifyItemRemoved(itemPos);
+            mAdapter.notifyItemRangeChanged(itemPos, data.size());
+            return true;
         }
     }
 
