@@ -72,8 +72,10 @@ public class Lectures extends Fragment {
         firestore.collection("users").document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.get("position").toString() == "STUDENT") {
-                    addLectureFAB.hide();
+                if (documentSnapshot.get("position") != null) {
+                    if (documentSnapshot.get("position").toString() == "STUDENT") {
+                        addLectureFAB.hide();
+                    }
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -131,7 +133,6 @@ public class Lectures extends Fragment {
                         filteredList.add(d);
                     }
                 }
-
                 mAdapter.updateList(filteredList);
             }
         });

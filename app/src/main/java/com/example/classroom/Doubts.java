@@ -152,11 +152,15 @@ public class Doubts extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot docSnap = task.getResult();
-                    if (docSnap.get("position").toString() == "STUDENT") {
-                        showAddQuestionDialog(v);
-                    } else if (docSnap.get("position").toString() == "MASTER") {
-                        Intent intent = new Intent(context, AddDoubt.class);
-                        v.getContext().startActivity(intent);
+                    if (docSnap.get("position") != null) {
+                        if (docSnap.get("position").toString() == "STUDENT") {
+                            showAddQuestionDialog(v);
+                        } else if (docSnap.get("position").toString() == "MASTER") {
+                            Intent intent = new Intent(context, AddDoubt.class);
+                            v.getContext().startActivity(intent);
+                        } else {
+                            showAddQuestionDialog(v);
+                        }
                     } else {
                         showAddQuestionDialog(v);
                     }
