@@ -44,13 +44,19 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder> {
     public void onBindViewHolder(@NonNull PersonalViewHolder chatViewHolder, int i) {
         chatViewHolder.mMessage.setText(chatLists.get(i).getMessage());
         if (chatLists.get(i).getCurrentUser()) {
-            chatViewHolder.mMessage.setGravity(Gravity.END);
+
+            chatViewHolder.mContainer.setGravity(Gravity.END);
             chatViewHolder.mMessage.setTextColor(Color.parseColor("#404040"));
-            chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#F4F4F4"));
+            chatViewHolder.mMessage.setBackgroundResource(R.drawable.white_bg);
+           // chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#F4F4F4"));
         } else {
-            chatViewHolder.mMessage.setGravity(Gravity.START);
+           // chatViewHolder.mMessage.setGravity(Gravity.START);
             chatViewHolder.mMessage.setTextColor(Color.parseColor("#FFFFFF"));
-            chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#2DB4C8"));
+            chatViewHolder.mMessage.setBackgroundResource(R.drawable.blue_bg);
+            chatViewHolder.mContainer.setGravity((Gravity.START));
+
+
+            chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
     }
 

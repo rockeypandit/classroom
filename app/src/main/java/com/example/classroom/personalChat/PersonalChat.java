@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -65,6 +64,7 @@ public class PersonalChat extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_chat);
         btnSend = findViewById(R.id.send);
@@ -72,12 +72,12 @@ public class PersonalChat extends AppCompatActivity {
         rv = findViewById(R.id.recyclerView);
         messege = findViewById(R.id.message);
 
-        //  friendId = getIntent().getExtras().getString("chatId");
-        friendId = "AhS3B153mOXhbukgYLV4wGqfggf2";
+          friendId = getIntent().getExtras().getString("chatId");
+       // friendId = "AhS3B153mOXhbukgYLV4wGqfggf2";
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
         linearLayout = findViewById(R.id.sendLayout);
-
+Log.i("CHATID",friendId);
 
         final DocumentReference chatId = db.collection("USERS").document(currentUserId).collection("Friends").document("Lists");
         chatId.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -118,7 +118,7 @@ public class PersonalChat extends AppCompatActivity {
                     }
                 }
 
-                sub = "AhS3B153mOXhbukgYLV4wGqfggf2";
+                sub = friendId;
 
 
                 if (sub == null) {
@@ -164,9 +164,9 @@ public class PersonalChat extends AppCompatActivity {
         mPersonalAdapter = new PersonalAdapter(getDataSetPersonal(), PersonalChat.this);
         mRecyclerView.setAdapter(mPersonalAdapter);
 
-
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(PersonalChat.this,
-                DividerItemDecoration.VERTICAL));
+//
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(PersonalChat.this,
+//                DividerItemDecoration.VERTICAL));
 
 
         btnSend.setOnClickListener(new View.OnClickListener() {

@@ -3,82 +3,82 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Chats">
+    android:layout_height="match_parent"
+    tools:context=".Chats"
+    >
 
     <android.support.v7.widget.CardView
         android:id="@+id/card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        app:cardElevation="5dp"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="#FAFAFA"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         app:cardCornerRadius="6dp"
-        app:cardElevation="5dp">
-
+        app:cardBackgroundColor="#FAFAFA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:weightSum="1"
             android:padding="3dp"
-            android:weightSum="1">
-
-            <AutoCompleteTextView
-                android:id="@+id/search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_marginBottom="-10dp"
-                android:layout_weight="0.1"
-                android:background="#00112233"
-                android:hint="SEARCH FRIENDS"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textSize="16sp" />
+            android:orientation="horizontal"
+            >
+        <AutoCompleteTextView
+            android:background="#00112233"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:layout_margin="10dp"
+            android:layout_marginBottom="-10dp"
+            android:hint="SEARCH FRIENDS"
+            android:id="@+id/search_bar"
+            android:layout_weight="0.1"
+            />
 
             <ImageButton
-                android:id="@+id/btnSelect"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignRight="@+id/search_bar"
                 android:layout_weight="0.9"
                 android:scaleType="fitXY"
-                android:src="@drawable/next"
-                tools:ignore="ObsoleteLayoutParam" />
+                android:id="@+id/btnSelect"
+                android:src="@drawable/next" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
 
     <ScrollView
+        android:layout_below="@id/card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/card">
+        android:layout_marginBottom="55dp">
 
-        <RelativeLayout
-            android:id="@+id/relativeChat"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/relativeChat">
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerView"
+        android:scrollbars="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical">
+    </android.support.v7.widget.RecyclerView>
 
-            </android.support.v7.widget.RecyclerView>
+</RelativeLayout>
 
-        </RelativeLayout>
 
 
     </ScrollView>
-
     <ProgressBar
         android:id="@+id/progress"
+        android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
