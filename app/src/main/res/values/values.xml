@@ -2,4 +2,5 @@
 <resources>
     <item name="alert_vid_name_text" type="id" />
     <item name="alert_vid_url_text" type="id" />
+
 </resources>

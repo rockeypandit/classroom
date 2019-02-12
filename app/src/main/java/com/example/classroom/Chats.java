@@ -174,53 +174,6 @@ friendUid=currentUserId;
 
 
 
-                    //  Log.i("VALUES",listArr[i]);
-
-
-//                    for (Map.Entry<String, Object> entry : documentData.entrySet()) {
-//
-//                        Log.d("TAG123", entry.getValue().toString());
-//
-//
-//                        if (entry.getKey().contains(currentUserId)) {
-//
-//                            Log.d("TAG12", entry.getValue().toString());
-//
-//                        }
-//                    }
-//
-
-                    //Log.i("FRIENDS",friendList.get(0));
-
-//
-//                    docFriendList.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                myFriendList = task.getResult();
-//                                mapFriendList=myFriendList.getData();
-//                                if (myFriendList.exists()) {
-//
-//                                    Log.i("error", myFriendList.getData().toString());
-//
-//                                } else {
-//                                    Log.i("error", "No such document");
-//                                }
-//                            } else {
-//                                Log.d("GETTING", "get failed with ", task.getException());
-//                            }
-//
-//                    }}).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.i("GETTING error", "get failed with " + e.getMessage() );
-//                        }
-//                    });
-
-
-
-
-
 
 
 
@@ -263,30 +216,12 @@ friendUid=currentUserId;
                                     view.findViewById(R.id.relativeChat).setVisibility(View.VISIBLE);
                                     Log.d("my DATA", "DocumentSnapshot data: " + document1.getData());
 
-                                    for (int i = 0; i < friendList.size(); i++) {
-                                        temp = friendList.get(i);
-                                        Log.i("ERROR12", temp);
-                                        fl.add(myFriendList.get(friendList.get(i)).toString());
 
 
 
-
-
-                                        ChatObject obj = new ChatObject("userID", fl.get(i), "IMAGE");
-
-                                            resultsChats.add(obj);
-
-
-
-                                       // fl.add(document.get(temp).toString());
-                                        Log.i("fl", fl.get(i));
-
-                                    }
-
-
-                                    view.findViewById(R.id.progress).setVisibility(View.GONE);
                                     flag=true;
 
+                                    view.findViewById(R.id.progress).setVisibility(View.GONE);
 
 
 
@@ -322,33 +257,36 @@ friendUid=currentUserId;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
                                 totalUnames = mapToatal.values().toArray(new String[0]);
                                 ArrayAdapter adapter = new ArrayAdapter(getContext(),android.R.layout.simple_list_item_1,totalUnames);
                                 searchbar.setAdapter(adapter);
 
 
 
-//                                searchbar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                                    @Override
-//                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                                        Log.i("CLICKED",totalUnames[position]);                                    }
-//
-//                                    @Override
-//                                    public void onNothingSelected(AdapterView<?> parent) {
-//
-//                                    }
-//                                });
+                                for (int i = 0; i < friendList.size(); i++) {
+                                    temp = friendList.get(i);
+                                    Log.i("ERROR12", temp);
+                                    fl.add(myFriendList.get(friendList.get(i)).toString());
+                                    //   Log.i("ERROR12",fl.get(i));
+
+
+
+
+
+
+
+                                    ChatObject obj = new ChatObject(temp, fl.get(i), "IMAGE");
+
+                                    resultsChats.add(obj);
+
+
+
+                                    // fl.add(document.get(temp).toString());
+                                    Log.i("fl", fl.get(i));
+
+                                }
+
+
                                 searchbar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -360,6 +298,10 @@ friendUid=currentUserId;
                                                 break;
                                             }
                                         }
+
+
+
+
                                         Log.i(searchbar.getText().toString(),keyList.get(index));
 
 
@@ -379,6 +321,7 @@ friendUid=currentUserId;
 
 
 
+
                                     }
                                 });
 
@@ -388,20 +331,11 @@ friendUid=currentUserId;
                             }
                         }
                     });
-//                    String temp;
-//                    for (int i = 0; i < friendList.size(); i++) {
-//                        temp = friendList.get(i);
-//                        Log.i("ERROR12", temp);
-//
-//
-//                        fl.add(document.get(temp).toString());
-//                        Log.i("ERROR12", fl.get(i));
-//
-//                    }
-
-
 
                     // resultsChats.add()
+                    if(documentData.containsKey(friendUid))
+                        flag=false;
+
 
 
                     view.findViewById(R.id.btnSelect).setOnClickListener(new View.OnClickListener() {
@@ -447,37 +381,7 @@ friendUid=currentUserId;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //SEARCH BAR
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
