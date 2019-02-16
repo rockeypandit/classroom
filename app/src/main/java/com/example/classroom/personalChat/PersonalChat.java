@@ -72,12 +72,12 @@ public class PersonalChat extends AppCompatActivity {
         rv = findViewById(R.id.recyclerView);
         messege = findViewById(R.id.message);
 
-          friendId = getIntent().getExtras().getString("chatId");
-       // friendId = "AhS3B153mOXhbukgYLV4wGqfggf2";
+        friendId = getIntent().getExtras().getString("chatId");
+        // friendId = "AhS3B153mOXhbukgYLV4wGqfggf2";
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
         linearLayout = findViewById(R.id.sendLayout);
-Log.i("CHATID",friendId);
+        Log.i("CHATID", friendId);
 
         final DocumentReference chatId = db.collection("USERS").document(currentUserId).collection("Friends").document("Lists");
         chatId.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

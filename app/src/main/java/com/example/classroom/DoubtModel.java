@@ -1,15 +1,13 @@
 package com.example.classroom;
 
-import android.media.Image;
-
 import java.io.Serializable;
 import java.util.List;
 
 public class DoubtModel implements Serializable {
-    String question;
-    String answer;
-    List<String> tags;
-    List<Image> images;
+    private String question;
+    private String answer;
+    private String attachmentLink;
+    private List<String> tags;
 
     public DoubtModel(String question) {
         this.question = question;
@@ -20,6 +18,12 @@ public class DoubtModel implements Serializable {
         this.answer = answer;
     }
 
+    public DoubtModel(String question, String answer, String attachmentLink) {
+        this.question = question;
+        this.answer = answer;
+        this.attachmentLink = attachmentLink;
+    }
+
     public String getQuestion() {
         return this.question;
     }
@@ -28,20 +32,20 @@ public class DoubtModel implements Serializable {
         this.question = question;
     }
 
+    public void setAttachmentLink(String link) {
+        this.attachmentLink = link;
+    }
+
+    public String getAttachmentLink() {
+        return this.attachmentLink;
+    }
+
     public String getAnswer() {
         return this.answer;
     }
 
     public void setAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public List<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Image> images) {
-        this.images = images;
     }
 
     public List<String> getTags() {

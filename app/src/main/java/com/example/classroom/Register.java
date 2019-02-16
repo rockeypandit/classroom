@@ -200,8 +200,6 @@ public class Register extends AppCompatActivity {
                         public void onSuccess(Void Void) {
 
                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
-
-
                             startActivity(i);
                             finish();
                             //  Toast.makeText(getApplicationContext(),"SUCCESS",Toast.LENGTH_LONG);
@@ -214,8 +212,6 @@ public class Register extends AppCompatActivity {
 
                         }
                     });
-
-
                 }
             }
         });

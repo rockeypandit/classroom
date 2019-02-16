@@ -198,20 +198,20 @@ public class Doubts extends Fragment {
                     if (docSnap.get("position") != null) {
                         if (docSnap.get("position").toString() == "STUDENT") {
                             showAddQuestionDialog(v);
-                        } else if (docSnap.get("position").toString() == "MASTER") {
+                        } else {
                             Intent intent = new Intent(context, AddDoubt.class);
                             v.getContext().startActivity(intent);
-                        } else {
-                            showAddQuestionDialog(v);
                         }
                     } else {
-                        showAddQuestionDialog(v);
+                        Intent intent = new Intent(context, AddDoubt.class);
+                        v.getContext().startActivity(intent);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    showAddQuestionDialog(v);
+                    Intent intent = new Intent(context, AddDoubt.class);
+                    v.getContext().startActivity(intent);
                 }
             });
         }
@@ -260,7 +260,14 @@ public class Doubts extends Fragment {
                             if (!documentSnapshots.isEmpty()) {
                                 for (DocumentSnapshot snapshot : documentSnapshots) {
                                     if (snapshot.get("answer") != null) {
-                                        dataSet.add(new DoubtModel(snapshot.get("question").toString(), snapshot.get("answer").toString()));
+                                        if (snapshot.get("attachmentLink") == null) {
+                                            dataSet.add(new DoubtModel(snapshot.get("question").toString(), snapshot.get("answer").toString()));
+                                        } else {
+                                            dataSet.add(new DoubtModel(
+                                                    snapshot.get("question").toString(),
+                                                    snapshot.get("answer").toString(),
+                                                    snapshot.get("attachmentLink").toString()));
+                                        }
                                     } else {
                                         dataSet.add(new DoubtModel(snapshot.get("question").toString()));
                                     }

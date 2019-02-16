@@ -93,10 +93,6 @@ friendUid=currentUserId;
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
-
-
-
-
         mChatAdapter.notifyDataSetChanged();
 
 
@@ -168,24 +164,6 @@ friendUid=currentUserId;
 
 
                     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                     final Map<String , Object> mapFriend = new HashMap<>();
                     for (int i = 0; i < friendList.size(); i++) {
