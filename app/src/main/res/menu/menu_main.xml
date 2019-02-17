@@ -4,6 +4,12 @@
     tools:context="com.example.classroom.MainActivity">
 
     <item
+        android:id="@+id/action_new_group"
+        android:orderInCategory="1"
+        android:title="New Group"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="1"
         android:title="Settings"

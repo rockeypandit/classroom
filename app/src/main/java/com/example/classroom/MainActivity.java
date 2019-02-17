@@ -156,21 +156,25 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if (id == R.id.action_new_group) {
+            startActivity(new Intent(getApplicationContext(), AddGroup.class));
+            return true;
+        }
 
         if (id == R.id.action_settings) {
             //Start setting activity from here
-            Toast.makeText(getApplicationContext(), "Settings Panel", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
             return true;
         }
 
         if (id == R.id.action_admin_panel) {
-            Toast.makeText(getApplicationContext(), "ADMIN Panel", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "ADMIN Panel", Toast.LENGTH_SHORT).show();
             return true;
         }
 
         if (id == R.id.action_logout) {
             mAuth.signOut();
-            // Toast.makeText(getApplicationContext(),"SETTING",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);

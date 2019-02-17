@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/grpNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Group's Name"
+        android:inputType="textPersonName" />
+
+    <LinearLayout
+        android:id="@+id/searchUserLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="true"
+        android:orientation="horizontal">
+
+        <AutoCompleteTextView
+            android:id="@+id/userSearchText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Search For Users" />
+
+        <Button
+            android:id="@+id/addUserBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add User" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Group Members: (Hold to remove)" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/grpUserRV"
+        android:layout_width="match_parent"
+        android:layout_height="400dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/createGrpBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CREATE GROUP" />
+
+</LinearLayout>
