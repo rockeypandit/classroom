@@ -9,7 +9,7 @@
         android:title="New Group"
         app:showAsAction="never" />
 
-    <item
+    <!--<item
         android:id="@+id/action_settings"
         android:orderInCategory="1"
         android:title="Settings"
@@ -19,7 +19,7 @@
         android:id="@+id/action_admin_panel"
         android:orderInCategory="2"
         android:title="Admin Panel"
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_logout"

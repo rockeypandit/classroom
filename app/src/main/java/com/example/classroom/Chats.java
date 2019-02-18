@@ -3,6 +3,7 @@ package com.example.classroom;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
@@ -178,13 +180,6 @@ public class Chats extends Fragment {
                                 Log.i("KEYS", keyList.size() + "");
                                 totalUnames = mapTotal.values().toArray(new String[0]);
 
-//                                for (int i =0;i<l.size();i++)
-//                                    Log.i(l.get(i),totalUnames[i]);
-
-
-                                // BiMap<String, Object> biMap = HashBiMap.create();
-
-
                                 totalUnames = mapTotal.values().toArray(new String[0]);
                                 ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, totalUnames);
                                 searchbar.setAdapter(adapter);
@@ -271,6 +266,26 @@ public class Chats extends Fragment {
                 }
             }
         });
+
+        db.collection("USERS").document(currentUserId).collection("Groups").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot snap = task.getResult();
+                    List<DocumentSnapshot> groupChats = snap.getDocuments();
+
+                    for (DocumentSnapshot s : groupChats) {
+                        resultsChats.add(new ChatObject(null, s.getData().get("name").toString(), null));
+                    }
+
+                    mChatAdapter.notifyDataSetChanged();
+                } else {
+                    Snackbar.make(view, "Cannot get group chats.", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
         //AFTER SEARCH ITEM CLICKE
         //SEARCH BAR
         return view;

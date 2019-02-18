@@ -36,20 +36,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder chatViewHolder, int i) {
-
-
         //INFO TO SHOW IN CHAT PAGE
-
-
         chatViewHolder.mChatId.setText(lists.get(i).getUserId());
         chatViewHolder.mChatName.setText(lists.get(i).getName());
-
-
     }
 
     @Override
     public int getItemCount() {
-
         return lists.size();
     }
 }
