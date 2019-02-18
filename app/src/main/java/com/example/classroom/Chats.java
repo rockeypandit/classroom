@@ -53,7 +53,7 @@ public class Chats extends Fragment {
 
     //FIREBASE
     private DatabaseReference mDatabase;
-    private ArrayList<ChatObject> resultsChats = new ArrayList<ChatObject>();
+    private ArrayList<ChatObject> resultsChats = new ArrayList<>();
 
     @Nullable
     @Override

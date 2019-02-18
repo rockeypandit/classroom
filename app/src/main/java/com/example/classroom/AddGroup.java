@@ -57,6 +57,7 @@ public class AddGroup extends AppCompatActivity {
                         if (!groupMembers.contains(userNameToAdd)) {
                             groupMembers.add(new ChatObject(userNamesToIdMap.get(userNameToAdd), userNameToAdd, null));
                             viewAdapter.updateList(groupMembers);
+                            searchUserText.setText("");
                         }
                     } else {
                         Snackbar.make(v, "Username not found.", Snackbar.LENGTH_SHORT).show();
@@ -97,7 +98,6 @@ public class AddGroup extends AppCompatActivity {
                     writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-
                             Snackbar.make(v, "Successfully created Group: " + grpNameText.getText().toString(), Snackbar.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
@@ -140,8 +140,8 @@ public class AddGroup extends AppCompatActivity {
                         userNamesToIdMap.put(user.getValue().toString(), user.getKey());
                     }
 
-                    //String[] users = listOfUserNames.toArray(new String[0]);
-                    //ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(AddGroup.this, R.id.userSearchText, users);
+                    //String[] users = userNamesToIdMap.keySet().toArray(new String[0]);
+                    //ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.id.userSearchText, users);
                     //searchUserText.setAdapter(listAdapter);
                 }
             }
