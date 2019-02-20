@@ -1,4 +1,4 @@
-package com.example.classroom.GroupChat;
+package com.example.classroom;
 
 public class GroupMessage {
     private String senderUid;
