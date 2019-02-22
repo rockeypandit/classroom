@@ -24,11 +24,18 @@ public class ChatViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(v.getContext(), PersonalChat.class);
-        Bundle b = new Bundle();
-        b.putString("chatId", mChatId.getText().toString());
-        intent.putExtras(b);
-        v.getContext().startActivity(intent);
-
+        if (mChatId.getText().toString().length() > 2) {
+            Intent intent = new Intent(v.getContext(), PersonalChat.class);
+            Bundle b = new Bundle();
+            b.putString("chatId", mChatId.getText().toString());
+            intent.putExtras(b);
+            v.getContext().startActivity(intent);
+        } else {
+            Intent grpIntent = new Intent(v.getContext(), GroupChat.class);
+            Bundle bndl = new Bundle();
+            bndl.putString("groupName", mChatName.getText().toString());
+            grpIntent.putExtras(bndl);
+            v.getContext().startActivity(grpIntent);
+        }
     }
 }

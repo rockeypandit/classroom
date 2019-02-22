@@ -90,7 +90,6 @@ public class AddGroup extends AppCompatActivity {
                         groupObject.put("name", grpNameText.getText().toString());
                         groupObject.put("members", membersToAdd);
 
-                        //addTask = firestore.collection("USERS").document(memberId).collection("Groups").add(groupObject);
                         CollectionReference clRef = firestore.collection("USERS").document(memberId).collection("Groups");
                         writeBatch.set(clRef.document(), groupObject);
                     }

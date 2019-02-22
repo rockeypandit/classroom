@@ -275,7 +275,7 @@ public class Chats extends Fragment {
                     List<DocumentSnapshot> groupChats = snap.getDocuments();
 
                     for (DocumentSnapshot s : groupChats) {
-                        resultsChats.add(new ChatObject(null, s.getData().get("name").toString(), null));
+                        resultsChats.add(new ChatObject(s.getData().get("name").toString()));
                     }
 
                     mChatAdapter.notifyDataSetChanged();
