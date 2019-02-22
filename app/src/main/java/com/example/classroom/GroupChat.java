@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,6 +18,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
@@ -26,7 +26,6 @@ import com.google.firebase.firestore.WriteBatch;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +42,7 @@ public class GroupChat extends AppCompatActivity {
     private Map<String, Object> groupChatData;
     private BiMap<String, String> memberToGrpMap;
     private List<String> groupMemberIds;
+    private List<DocumentReference> groupDocRefs;
     private String groupName, currentUserId;
 
     @Override
@@ -72,6 +72,7 @@ public class GroupChat extends AppCompatActivity {
                     groupMemberIds = (List<String>) groupChatData.get("members");
 
                     memberToGrpMap = HashBiMap.create();
+                    groupDocRefs = new ArrayList<>();
 
                     for (final String member : groupMemberIds) {
                         firestore.collection("USERS")
@@ -84,79 +85,19 @@ public class GroupChat extends AppCompatActivity {
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                         String grpId = queryDocumentSnapshots.getDocuments().get(0).getId();
                                         memberToGrpMap.put(member, grpId);
+
+                                        DocumentReference ref = firestore.collection("USERS")
+                                                .document(member)
+                                                .collection("Groups")
+                                                .document(grpId);
+
+                                        groupDocRefs.add(ref);
                                     }
                                 });
                     }
                 }
             }
         });
-
-        /*sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(groupChatData != null) {
-                    List<String> groupMemberIds = (List<String>) groupChatData.get("members");
-                    Log.d("GROUP MEMBERS", groupMemberIds.toString());
-
-                    if(messageText.getText().toString().length() >= 1) {
-                        final WriteBatch writeBatch = firestore.batch();
-
-                        final Map<String, String> message = new HashMap<>();
-                        message.put("senderId", currentUserId);
-                        message.put("text", messageText.getText().toString());
-                        message.put("timestamp", new Date().toString());
-
-                        //final ArrayList<DocumentReference> docRefs = new ArrayList<>();
-                        final List<String> documentIds = new ArrayList<>();
-
-                        //Get document refs of the group fro all the references;
-                        for(final String member : groupMemberIds) {
-                            firestore.collection("USERS")
-                                    .document(member)
-                                    .collection("Groups")
-                                    .whereEqualTo("name", groupName)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            final String groupId = task.getResult().getDocuments().get(0).getId();
-
-                                            documentIds.add(groupId);
-
-                                            Log.d("GROUPCHAT ID", groupId);
-
-                                        }
-                                    });
-                        }
-
-                        Log.d("GROUPCHAT SIZE", String.valueOf(documentIds.size()));
-
-                        for(final String ref : documentIds) {
-                            //writeBatch.set(ref, message);
-                            Log.d("GROUPCHAT DOCREFS", ref.getId());
-
-                            DocumentReference ref = firestore.collection("USERS")
-                                    .document(member)
-                                    .collection("Groups")
-                                    .document(groupId);
-
-                            writeBatch.update(ref, "messages", FieldValue.arrayUnion(message));
-                        }
-
-                        writeBatch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()) {
-                                    messageText.setText("");
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Error sending message.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });*/
     }
 
     @Override
@@ -173,27 +114,17 @@ public class GroupChat extends AppCompatActivity {
                 message.put("timestamp", new Date().toString());
 
                 WriteBatch writeBatch = firestore.batch();
-                Iterator<String> member = groupMemberIds.iterator();
 
-                while (member.hasNext()) {
-                    DocumentReference grpDoc = firestore.collection("USERS")
-                            .document(member.next())
-                            .collection("Groups")
-                            .document(memberToGrpMap.get(member.next()));
-
-                    Log.d("GROUPCHAT DOC", grpDoc.getId());
-                    writeBatch.update(grpDoc, "messages", message);
-
-                    if (!member.hasNext()) {
-                        writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(getApplicationContext(), "Message sent.", Toast.LENGTH_SHORT).show();
-                                messageText.setText("");
-                            }
-                        });
-                    }
+                for (DocumentReference ref : groupDocRefs) {
+                    writeBatch.update(ref, "messages", FieldValue.arrayUnion(message));
                 }
+
+                writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        messageText.setText("");
+                    }
+                });
             }
         });
     }
