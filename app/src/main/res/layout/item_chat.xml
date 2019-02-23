@@ -17,13 +17,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/white_bg"
         android:padding="6dp"
-
-
-
         android:text="Text"
         android:id="@+id/message"/>
-
-
-
 </LinearLayout>
 </LinearLayout>

@@ -9,8 +9,6 @@ import android.widget.TextView;
 import com.example.classroom.R;
 
 public class PersonalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-
     public TextView mMessage;
     public LinearLayout mContainer;
 
@@ -20,12 +18,10 @@ public class PersonalViewHolder extends RecyclerView.ViewHolder implements View.
 
         mMessage = itemView.findViewById(R.id.message);
         mContainer = itemView.findViewById(R.id.container);
-
     }
 
     @Override
     public void onClick(View v) {
-
 
     }
 }

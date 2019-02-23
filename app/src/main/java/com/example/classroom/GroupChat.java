@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,6 +20,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,14 +38,15 @@ public class GroupChat extends AppCompatActivity {
     private LinearLayout linearLayout;
     private NestedScrollView scrollView;
     private RecyclerView rv;
-    private RecyclerView.Adapter groupAdapter;
+    private GroupChatAdapter groupAdapter;
     private RecyclerView.LayoutManager groupLayoutManager;
     private FirebaseFirestore firestore;
-    private ArrayList<GroupMessage> messages;
-    private Map<String, Object> groupChatData;
-    private BiMap<String, String> memberToGrpMap;
-    private List<String> groupMemberIds;
-    private List<DocumentReference> groupDocRefs;
+    private List<GroupChatObject> messages;
+    private Map<String, Object> groupChatData; //Snapshot of groupchat data with messages, members ids and group name
+    private Map<String, String> userIdToNameMap; //Maps member uids to their username;
+    private BiMap<String, String> memberToGrpMap; //Maps every group members UID to group chat ID
+    private List<String> groupMemberIds; //User IDs of each group member
+    private List<DocumentReference> groupDocRefs; //Docrefs for group chat entries which needs to be pushed when user sends a message
     private String groupName, currentUserId;
 
     @Override
@@ -50,13 +54,31 @@ public class GroupChat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_personal_chat);
+        groupName = getIntent().getExtras().getString("groupName");
+        setTitle(groupName);
+
         firestore = FirebaseFirestore.getInstance();
         messageText = findViewById(R.id.message);
         sendButton = findViewById(R.id.send);
         attachFileButton = findViewById(R.id.attach);
         rv = findViewById(R.id.recyclerView);
         currentUserId = FirebaseAuth.getInstance().getUid();
-        groupName = getIntent().getExtras().getString("groupName");
+
+        messages = new ArrayList<>();
+        userIdToNameMap = new HashMap<>();
+        firestore.collection("USERS")
+                .document("userNames")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        for (Map.Entry<String, Object> doc : documentSnapshot.getData().entrySet()) {
+                            userIdToNameMap.put(doc.getKey(), doc.getValue().toString());
+                        }
+
+                        Log.d("GROUPCHAT MEMBERIDMAP", userIdToNameMap.toString());
+                    }
+                });
 
         firestore.collection("USERS").document(currentUserId)
                 .collection("Groups")
@@ -70,6 +92,25 @@ public class GroupChat extends AppCompatActivity {
                     QuerySnapshot snap = task.getResult();
                     groupChatData = snap.getDocuments().get(0).getData();
                     groupMemberIds = (List<String>) groupChatData.get("members");
+
+                    //If groupchatdata has a messages field
+                    if (groupChatData.containsKey("messages")) {
+                        List<Map<String, String>> temp = (List<Map<String, String>>) groupChatData.get("messages");
+
+                        if (temp != null) {
+                            for (Map<String, String> t : temp) {
+                                if (currentUserId.equals(t.get("senderId"))) {
+                                    messages.add(new GroupChatObject(t.get("text"),
+                                            userIdToNameMap.get(t.get("senderId")),
+                                            true));
+                                } else {
+                                    messages.add(new GroupChatObject(t.get("text"),
+                                            userIdToNameMap.get(t.get("senderId"))));
+                                }
+                            }
+                            groupAdapter.updateList(messages);
+                        }
+                    }
 
                     memberToGrpMap = HashBiMap.create();
                     groupDocRefs = new ArrayList<>();
@@ -98,12 +139,21 @@ public class GroupChat extends AppCompatActivity {
                 }
             }
         });
+
+
+        rv.setNestedScrollingEnabled(false);
+        rv.setHasFixedSize(false);
+
+        groupLayoutManager = new LinearLayoutManager(GroupChat.this);
+        rv.setLayoutManager(groupLayoutManager);
+
+        groupAdapter = new GroupChatAdapter(messages, GroupChat.this);
+        rv.setAdapter(groupAdapter);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,6 +162,12 @@ public class GroupChat extends AppCompatActivity {
                 message.put("senderId", currentUserId);
                 message.put("text", messageText.getText().toString());
                 message.put("timestamp", new Date().toString());
+
+                messages.add(new GroupChatObject(
+                        userIdToNameMap.get(message.get("senderId")),
+                        message.get("text"),
+                        true
+                ));
 
                 WriteBatch writeBatch = firestore.batch();
 
@@ -129,9 +185,7 @@ public class GroupChat extends AppCompatActivity {
         });
     }
 
-    public List<GroupChatObject> getGroupMessagesFromDB() {
-        final List<GroupChatObject> groupMessages = new ArrayList<>();
-
+    public void updateGropuMessagesFromDB() {
         firestore.collection("USERS")
                 .document(currentUserId)
                 .collection("Groups")
@@ -142,16 +196,29 @@ public class GroupChat extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         Map<String, Object> chatData = queryDocumentSnapshots.getDocuments().get(0).getData();
 
+                        @SuppressWarnings("unchecked")
                         List<Map<String, String>> temp = (List<Map<String, String>>) chatData.get("messages");
-                        for (Map<String, String> t : temp) {
-                            groupMessages.add(new GroupChatObject(
-                                    t.get("text"),
-                                    t.get("senderId")
-                            ));
+
+                        if (temp != null) {
+                            for (Map<String, String> t : temp) {
+                                if (currentUserId.equals(t.get("senderId"))) {
+                                    messages.add(new GroupChatObject(t.get("text"),
+                                            userIdToNameMap.get(t.get("senderId")),
+                                            true));
+                                } else {
+                                    messages.add(new GroupChatObject(t.get("text"),
+                                            userIdToNameMap.get(t.get("senderId"))));
+                                }
+                            }
+
+                            Log.d("UPDATED MESSAGES", messages.toString());
+                            groupAdapter.updateList(messages);
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Cannot get group messages.", Toast.LENGTH_SHORT)
+                                    .show();
                         }
                     }
                 });
-        Log.d("GROUP MESSAGES", groupMessages.toString());
-        return groupMessages;
     }
 }

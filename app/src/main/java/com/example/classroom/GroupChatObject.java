@@ -1,8 +1,8 @@
 package com.example.classroom;
 
 public class GroupChatObject {
-    String message, senderName;
-    Boolean currentUser;
+    private String message, senderName;
+    private Boolean currentUser;
 
     public GroupChatObject(String message, String senderName, Boolean currentUser) {
         this.message = message;

@@ -24,16 +24,13 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder> {
         this.context = context;
     }
 
-
     @NonNull
     @Override
     public PersonalViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         //INFLATER
         View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_chat, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutView.setLayoutParams(lp);
-
 
         PersonalViewHolder cvh = new PersonalViewHolder(layoutView);
 
@@ -44,7 +41,6 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder> {
     public void onBindViewHolder(@NonNull PersonalViewHolder chatViewHolder, int i) {
         chatViewHolder.mMessage.setText(chatLists.get(i).getMessage());
         if (chatLists.get(i).getCurrentUser()) {
-
             chatViewHolder.mContainer.setGravity(Gravity.END);
             chatViewHolder.mMessage.setTextColor(Color.parseColor("#404040"));
             chatViewHolder.mMessage.setBackgroundResource(R.drawable.white_bg);
