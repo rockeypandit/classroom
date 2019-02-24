@@ -135,13 +135,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        /*if (id == R.id.action_settings) {
+        if (id == R.id.action_settings) {
             //Start setting activity from here
-            Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), AppSettings.class));
             return true;
         }
 
-        if (id == R.id.action_admin_panel) {
+        /*if (id == R.id.action_admin_panel) {
             Toast.makeText(getApplicationContext(), "ADMIN Panel", Toast.LENGTH_SHORT).show();
             return true;
         }*/

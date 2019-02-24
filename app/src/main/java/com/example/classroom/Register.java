@@ -127,21 +127,6 @@ public class Register extends AppCompatActivity {
                             }
                         }
                     });
-
-
-//                    db.collection("USERS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    exist = document.getData().toString();
-//
-//                                }
-//                            }
-//                        }
-//                    });
-
-
                 } else
                     userAvail.setText("");
 

@@ -1,7 +1,6 @@
 package com.example.classroom;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -40,12 +39,12 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatHolder> {
 
         if (groupChats.get(i).getCurrentUser()) {
             groupChatHolder.mContainer.setGravity(Gravity.END);
-            groupChatHolder.messageText.setTextColor(Color.parseColor("#404040"));
+            //groupChatHolder.messageText.setTextColor(Color.parseColor("#404040"));
             groupChatHolder.messageText.setBackgroundResource(R.drawable.white_bg);
         } else {
             groupChatHolder.mContainer.setGravity(Gravity.START);
-            groupChatHolder.mContainer.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            groupChatHolder.messageText.setTextColor(Color.parseColor("#FFFFFF"));
+            //groupChatHolder.mContainer.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            //groupChatHolder.messageText.setTextColor(Color.parseColor("#FFFFFF"));
             groupChatHolder.messageText.setBackgroundResource(R.drawable.blue_bg);
         }
     }

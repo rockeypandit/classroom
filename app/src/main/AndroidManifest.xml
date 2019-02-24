@@ -26,6 +26,9 @@
         <activity android:name=".AddDoubt" />
         <activity android:name=".GroupChat" />
         <activity
+            android:name=".AppSettings"
+            android:label="Settings" />
+        <activity
             android:name=".AddGroup"
             android:label="Add New Group" />
         <activity
