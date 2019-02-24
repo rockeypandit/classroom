@@ -1,6 +1,9 @@
 package com.example.classroom.personalChat;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
@@ -9,9 +12,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.classroom.R;
@@ -23,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,6 +59,7 @@ public class PersonalChat extends AppCompatActivity {
     private RecyclerView.LayoutManager mPersonalLayoutManager;
     private DatabaseReference mDatabase;
     private Date dateTime;
+    ProgressBar progress;
     private ArrayList<PersonalObject> resultsPersonal = new ArrayList<PersonalObject>();
 
     public Date getDateTime() {
@@ -70,6 +78,7 @@ public class PersonalChat extends AppCompatActivity {
         btnSend = findViewById(R.id.send);
         scrlView = findViewById(R.id.scrollView);
         rv = findViewById(R.id.recyclerView);
+        progress = findViewById(R.id.progressPersonal);
         messege = findViewById(R.id.message);
 
         friendId = getIntent().getExtras().getString("chatId");
@@ -144,14 +153,72 @@ public class PersonalChat extends AppCompatActivity {
                 //    personalChatId = db.collection("USERS").document("Chat").collection("PersonalChats").document(chatIdStr);
                 //String key = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
 
+                final String chatIdStrTemp = chatIdStr;
+
+                chatIdStr = currentUserId + " | " + chatIdStr;
+                Log.i("existed  ",chatIdStr);
+
+
+
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat");
+
+                Handler handler = new Handler();
+
+
+
+
+
+                        mDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.i("iffffffffffffffffffff  ",dataSnapshot.toString());
+                //                        String temp = chatIdStr + " | " + currentUserId;
+                //                        temp=temp.trim();
+
+                                if(dataSnapshot.hasChild(chatIdStrTemp + " | " +currentUserId)) {
+                                    chatIdStr = chatIdStrTemp + " | " + currentUserId;
+                                    // chatIdStr="aHF86oEgahhS8W1n8OxeIPjZBHl2 | AhS3B153mOXhbukgYLV4wGqfggf2";
+
+                                    Log.i("iggggfffff  ",chatIdStr);
+
+                                    //mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
+                                   // getChatMessage();
+                                }
+
+                                // chatIdStr =currentUserId + " | " + chatIdStr;
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+
+                        });
+
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
-                //    Log.i("firebase",key);
+                Log.i("STR123   ",chatIdStr);
 
 
                 getChatMessage();
+                progress.setVisibility(View.GONE);
+                messege.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(messege, InputMethodManager.SHOW_IMPLICIT);
+            }
+        },1500);
+
+
+
 
             }
         });
+
 
 
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -290,6 +357,5 @@ public class PersonalChat extends AppCompatActivity {
     private List<PersonalObject> getDataSetPersonal() {
         return resultsPersonal;
     }
-
 
 }

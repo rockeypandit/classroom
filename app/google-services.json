@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "538759687920-8brp62cks36udq8ue4d2as4j8gjvab2t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.classroom",
+            "certificate_hash": "92ad215f6ba885bdde73267f550d804e457c3855"
+          }
+        },
+        {
           "client_id": "538759687920-l4p9kpolgov8hd9idcmfdni47v4076hi.apps.googleusercontent.com",
           "client_type": 3
         }
