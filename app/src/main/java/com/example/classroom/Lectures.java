@@ -45,9 +45,9 @@ public class Lectures extends Fragment {
     private static RecyclerView lecturesRecyclerView;
     private static CustomAdapter mAdapter;
     private static ArrayList<DataModel> data;
-    private FirebaseUser currentUser;
     private static FirebaseFirestore firestore;
     private static List<DocumentSnapshot> documentSnapshots;
+    private FirebaseUser currentUser;
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton addLectureFAB;
     private TextInputEditText searchEditText;

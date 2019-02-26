@@ -44,9 +44,9 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalViewHolder> {
             chatViewHolder.mContainer.setGravity(Gravity.END);
             chatViewHolder.mMessage.setTextColor(Color.parseColor("#404040"));
             chatViewHolder.mMessage.setBackgroundResource(R.drawable.white_bg);
-           // chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#F4F4F4"));
+            // chatViewHolder.mContainer.setBackgroundColor(Color.parseColor("#F4F4F4"));
         } else {
-           // chatViewHolder.mMessage.setGravity(Gravity.START);
+            // chatViewHolder.mMessage.setGravity(Gravity.START);
             chatViewHolder.mMessage.setTextColor(Color.parseColor("#FFFFFF"));
             chatViewHolder.mMessage.setBackgroundResource(R.drawable.blue_bg);
             chatViewHolder.mContainer.setGravity((Gravity.START));

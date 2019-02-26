@@ -32,12 +32,12 @@ public class DoubtModel implements Serializable {
         this.question = question;
     }
 
-    public void setAttachmentLink(String link) {
-        this.attachmentLink = link;
-    }
-
     public String getAttachmentLink() {
         return this.attachmentLink;
+    }
+
+    public void setAttachmentLink(String link) {
+        this.attachmentLink = link;
     }
 
     public String getAnswer() {

@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
@@ -39,6 +41,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
         //INFO TO SHOW IN CHAT PAGE
         chatViewHolder.mChatId.setText(lists.get(i).getUserId());
         chatViewHolder.mChatName.setText(lists.get(i).getName());
+
+        if (lists.get(i).getImageUrl() != null && !lists.get(i).isGroupChat()) {
+            Picasso.get().load(lists.get(i).getImageUrl()).into(chatViewHolder.mChatImage);
+        }
+
+        if (lists.get(i).isGroupChat()) {
+            chatViewHolder.mChatImage.setImageResource(R.drawable.group_chat);
+        }
     }
 
     @Override

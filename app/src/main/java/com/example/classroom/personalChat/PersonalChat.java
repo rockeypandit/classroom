@@ -1,7 +1,6 @@
 package com.example.classroom.personalChat;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.classroom.R;
@@ -54,12 +52,12 @@ public class PersonalChat extends AppCompatActivity {
     RecyclerView rv;
     FirebaseFirestore db;
     String msg = null;
+    ProgressBar progress;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mPersonalAdapter;
     private RecyclerView.LayoutManager mPersonalLayoutManager;
     private DatabaseReference mDatabase;
     private Date dateTime;
-    ProgressBar progress;
     private ArrayList<PersonalObject> resultsPersonal = new ArrayList<PersonalObject>();
 
     public Date getDateTime() {
@@ -156,8 +154,7 @@ public class PersonalChat extends AppCompatActivity {
                 final String chatIdStrTemp = chatIdStr;
 
                 chatIdStr = currentUserId + " | " + chatIdStr;
-                Log.i("existed  ",chatIdStr);
-
+                Log.i("existed  ", chatIdStr);
 
 
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat");
@@ -165,60 +162,54 @@ public class PersonalChat extends AppCompatActivity {
                 Handler handler = new Handler();
 
 
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.i("iffffffffffffffffffff  ", dataSnapshot.toString());
+                        //                        String temp = chatIdStr + " | " + currentUserId;
+                        //                        temp=temp.trim();
+
+                        if (dataSnapshot.hasChild(chatIdStrTemp + " | " + currentUserId)) {
+                            chatIdStr = chatIdStrTemp + " | " + currentUserId;
+                            // chatIdStr="aHF86oEgahhS8W1n8OxeIPjZBHl2 | AhS3B153mOXhbukgYLV4wGqfggf2";
+
+                            Log.i("iggggfffff  ", chatIdStr);
+
+                            //mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
+                            // getChatMessage();
+                        }
+
+                        // chatIdStr =currentUserId + " | " + chatIdStr;
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
 
 
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-                        mDatabase.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Log.i("iffffffffffffffffffff  ",dataSnapshot.toString());
-                //                        String temp = chatIdStr + " | " + currentUserId;
-                //                        temp=temp.trim();
-
-                                if(dataSnapshot.hasChild(chatIdStrTemp + " | " +currentUserId)) {
-                                    chatIdStr = chatIdStrTemp + " | " + currentUserId;
-                                    // chatIdStr="aHF86oEgahhS8W1n8OxeIPjZBHl2 | AhS3B153mOXhbukgYLV4wGqfggf2";
-
-                                    Log.i("iggggfffff  ",chatIdStr);
-
-                                    //mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
-                                   // getChatMessage();
-                                }
-
-                                // chatIdStr =currentUserId + " | " + chatIdStr;
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-
-                        });
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
+                        Log.i("STR123   ", chatIdStr);
 
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("User").child("Chat").child(chatIdStr);
-                Log.i("STR123   ",chatIdStr);
-
-
-                getChatMessage();
-                progress.setVisibility(View.GONE);
-                messege.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(messege, InputMethodManager.SHOW_IMPLICIT);
-            }
-        },1500);
-
-
+                        getChatMessage();
+                        progress.setVisibility(View.GONE);
+                        messege.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(messege, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                }, 1500);
 
 
             }
         });
-
 
 
         mRecyclerView = findViewById(R.id.recyclerView);

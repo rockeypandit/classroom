@@ -46,7 +46,6 @@ public class GroupChat extends AppCompatActivity {
     private BiMap<String, String> memberToGrpMap; //Maps every group members UID to group chat ID
     private List<String> groupMemberIds; //User IDs of each group member
     private List<DocumentReference> groupDocRefs; //Docrefs for group chat entries which needs to be pushed when user sends a message
-    private DocumentReference docRefOfCurrentRef;
     private String groupName, currentUserId;
 
     @Override

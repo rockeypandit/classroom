@@ -50,11 +50,10 @@ public class Chats extends Fragment {
     String friendUid;//= "AhS3B153mOXhbukgYLV4wGqfggf2";
     DocumentReference chatId;
     List<String> friendList;
+    List<String> fl = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mChatAdapter;
     private RecyclerView.LayoutManager mChatLayoutManager;
-    List<String> fl = new ArrayList<>();
-
     //FIREBASE
     private DatabaseReference mDatabase;
     private ArrayList<ChatObject> resultsChats = new ArrayList<>();
@@ -191,22 +190,15 @@ public class Chats extends Fragment {
                                 ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, totalUnames);
                                 searchbar.setAdapter(adapter);
 
-
                                 for (int i = 0; i < friendList.size(); i++) {
                                     temp = friendList.get(i);
                                     Log.i("ERROR12", temp);
                                     fl.add(myFriendList.get(friendList.get(i)).toString());
                                     //   Log.i("ERROR12",fl.get(i));
-
-
                                     ChatObject obj = new ChatObject(temp, fl.get(i), "IMAGE");
 
                                     resultsChats.add(obj);
-                                    // fl.add(document.get(temp).toString());
-                                    Log.i("fl", fl.get(i));
-
                                 }
-
 
                                 searchbar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
@@ -291,7 +283,6 @@ public class Chats extends Fragment {
                 }
             }
         });
-
 
         //AFTER SEARCH ITEM CLICKE
         //SEARCH BAR

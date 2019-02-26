@@ -3,6 +3,7 @@ package com.example.classroom;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +21,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     private Menu menu;
     private FirebaseAuth mAuth;
-
+    private String currentUserPosition;
 
     // DocumentReference docRef = db.collection("USERS").document();
 
@@ -81,6 +84,20 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        FirebaseFirestore.getInstance().collection("USERS")
+                .document(mAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.contains("position")) {
+                            currentUserPosition = documentSnapshot.get("position").toString();
+                        } else {
+                            currentUserPosition = null;
+                        }
+                    }
+                });
     }
 
 
@@ -89,37 +106,6 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         this.menu = menu;
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-
-            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-            android.support.v7.widget.SearchView search = (android.support.v7.widget.SearchView) menu.findItem(R.id.action_search).getActionView();
-
-            search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-
-            search.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String changedText) {
-                    mainlist.clear();
-                    for (String text : list) {
-                        String newtext = text.toLowerCase();
-                        if (newtext.startsWith(changedText)) {
-                            mainlist.add(text);
-                        }
-                    }
-                    listView.setAdapter(test);
-                    return false;
-                }
-
-            });
-        }*/
         return true;
     }
 
@@ -131,8 +117,20 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_new_group) {
-            startActivity(new Intent(getApplicationContext(), AddGroup.class));
-            return true;
+
+            if (currentUserPosition != null) {
+                if (currentUserPosition.equals("MASTER")) {
+                    startActivity(new Intent(getApplicationContext(), AddGroup.class));
+                    return true;
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "You are not allowed to create groups.", Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+            } else {
+                Snackbar.make(findViewById(android.R.id.content), "You are not allowed to create groups.", Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
         }
 
         if (id == R.id.action_settings) {

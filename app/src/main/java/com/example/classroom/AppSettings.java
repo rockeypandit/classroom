@@ -32,14 +32,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AppSettings extends AppCompatActivity {
+    String currentUserId;
+    Uri userPhoto;
     private EditText userNameEditText, organisationEditText, positionEditText;
     private ImageView profilePicView;
     private Button updateInfoButton;
     private TextView userNameText, userIdText;
     private FirebaseFirestore firestore;
     private FirebaseStorage storageReference;
-    String currentUserId;
-    Uri userPhoto;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -1,8 +1,8 @@
 package com.example.classroom;
 
 public class ChatObject {
-    String userId, name, imageUrl;
-    boolean isGroupChat;
+    private String userId, name, imageUrl;
+    private boolean isGroupChat;
 
     public ChatObject(String userId, String name, String imageUrl) {
         this.userId = userId;
@@ -12,6 +12,7 @@ public class ChatObject {
     }
 
     public ChatObject(String groupChatName) {
+        this.imageUrl = null;
         this.isGroupChat = true;
         this.userId = null;
         this.name = groupChatName;

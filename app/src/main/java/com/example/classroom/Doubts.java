@@ -49,6 +49,72 @@ public class Doubts extends Fragment {
     private FloatingActionButton addDoubtFAB;
     private TextInputEditText searchEditText;
 
+    public static void showAddQuestionDialog(final View v) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(v.getContext());
+        final EditText quesEditText = new EditText(v.getContext());
+        dialogBuilder.setTitle("Add New Question");
+        dialogBuilder.setView(quesEditText);
+
+        dialogBuilder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String quesiton = quesEditText.getText().toString();
+
+                Map<String, String> doubtData = new HashMap<>();
+                doubtData.put("question", quesiton);
+
+                firestore.collection("doubts").add(doubtData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Snackbar succeSnackbar = Snackbar.make(v, "Successfully Added new Lecture.", Snackbar.LENGTH_SHORT);
+                        succeSnackbar.show();
+                    }
+                });
+                Doubts.loadDoubtsfromDB();
+            }
+        });
+
+        dialogBuilder.create();
+        dialogBuilder.show();
+    }
+
+    public static void loadDoubtsfromDB() {
+        final ArrayList<DoubtModel> dataSet = new ArrayList<>();
+        firestore.collection("doubts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    task.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            documentSnapshots = queryDocumentSnapshots.getDocuments();
+
+                            if (!documentSnapshots.isEmpty()) {
+                                for (DocumentSnapshot snapshot : documentSnapshots) {
+                                    if (snapshot.get("answer") != null) {
+                                        if (snapshot.get("attachmentLink") == null) {
+                                            dataSet.add(new DoubtModel(snapshot.get("question").toString(), snapshot.get("answer").toString()));
+                                        } else {
+                                            dataSet.add(new DoubtModel(
+                                                    snapshot.get("question").toString(),
+                                                    snapshot.get("answer").toString(),
+                                                    snapshot.get("attachmentLink").toString()));
+                                        }
+                                    } else {
+                                        dataSet.add(new DoubtModel(snapshot.get("question").toString()));
+                                    }
+                                }
+                            }
+                            mAdapter.updateList(dataSet);
+                        }
+                    });
+                } else {
+                    Log.d("DB ERROR", "Cannot load doubts.");
+                }
+            }
+        });
+    }
+
     @javax.annotation.Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -215,71 +281,5 @@ public class Doubts extends Fragment {
                 }
             });
         }
-    }
-
-    public static void showAddQuestionDialog(final View v) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(v.getContext());
-        final EditText quesEditText = new EditText(v.getContext());
-        dialogBuilder.setTitle("Add New Question");
-        dialogBuilder.setView(quesEditText);
-
-        dialogBuilder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String quesiton = quesEditText.getText().toString();
-
-                Map<String, String> doubtData = new HashMap<>();
-                doubtData.put("question", quesiton);
-
-                firestore.collection("doubts").add(doubtData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Snackbar succeSnackbar = Snackbar.make(v, "Successfully Added new Lecture.", Snackbar.LENGTH_SHORT);
-                        succeSnackbar.show();
-                    }
-                });
-                Doubts.loadDoubtsfromDB();
-            }
-        });
-
-        dialogBuilder.create();
-        dialogBuilder.show();
-    }
-
-    public static void loadDoubtsfromDB() {
-        final ArrayList<DoubtModel> dataSet = new ArrayList<>();
-        firestore.collection("doubts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    task.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            documentSnapshots = queryDocumentSnapshots.getDocuments();
-
-                            if (!documentSnapshots.isEmpty()) {
-                                for (DocumentSnapshot snapshot : documentSnapshots) {
-                                    if (snapshot.get("answer") != null) {
-                                        if (snapshot.get("attachmentLink") == null) {
-                                            dataSet.add(new DoubtModel(snapshot.get("question").toString(), snapshot.get("answer").toString()));
-                                        } else {
-                                            dataSet.add(new DoubtModel(
-                                                    snapshot.get("question").toString(),
-                                                    snapshot.get("answer").toString(),
-                                                    snapshot.get("attachmentLink").toString()));
-                                        }
-                                    } else {
-                                        dataSet.add(new DoubtModel(snapshot.get("question").toString()));
-                                    }
-                                }
-                            }
-                            mAdapter.updateList(dataSet);
-                        }
-                    });
-                } else {
-                    Log.d("DB ERROR", "Cannot load doubts.");
-                }
-            }
-        });
     }
 }

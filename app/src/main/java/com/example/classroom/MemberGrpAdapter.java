@@ -12,16 +12,6 @@ import java.util.ArrayList;
 public class MemberGrpAdapter extends RecyclerView.Adapter<MemberGrpAdapter.RVHolder> {
     private ArrayList<ChatObject> data;
 
-    public static class RVHolder extends RecyclerView.ViewHolder {
-        public TextView userNameText;
-
-        public RVHolder(View v) {
-            super(v);
-
-            this.userNameText = itemView.findViewById(R.id.userNameText);
-        }
-    }
-
     public MemberGrpAdapter(ArrayList<ChatObject> groupMembers) {
         this.data = groupMembers;
     }
@@ -49,5 +39,15 @@ public class MemberGrpAdapter extends RecyclerView.Adapter<MemberGrpAdapter.RVHo
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public static class RVHolder extends RecyclerView.ViewHolder {
+        public TextView userNameText;
+
+        public RVHolder(View v) {
+            super(v);
+
+            this.userNameText = itemView.findViewById(R.id.userNameText);
+        }
     }
 }
